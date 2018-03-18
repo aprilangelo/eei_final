@@ -8,12 +8,25 @@ $(document).ready(function(){
       window.location = $(this).data("href");
   });
 
-
 ///////////////////////////////////////////// GENERAL ///////////////////////////////////////////////////////
   //Setting Active Link on Current Page
   var path = window.location.pathname.split("/").pop();  // Get current path and find target link
   var target = $('.side-nav a[href="'+path+'"]');  // Add active class to target link
   target.addClass('activelink');
+
+  //Auto open collapsible sidenav if link is active
+  if(window.location.href.indexOf("review") != -1) {
+    $('#auto-down.collapsible').collapsible('open', 0);
+  }
+  if(window.location.href.indexOf("checked") != -1) {
+    $('#auto-down.collapsible').collapsible('open', 0);
+  }
+  if(window.location.href.indexOf("approved") != -1) {
+    $('#auto-down.collapsible').collapsible('open', 0);
+  }
+  if(window.location.href.indexOf("my") != -1) {
+    $('#my-auto-down.collapsible').collapsible('open', 0);
+  }
 
   //Set current date for Date Prepared in forms
   var now = new Date();

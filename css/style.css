@@ -383,7 +383,8 @@ display: none;
 .activelink {
   border-left: 4px solid #4b75ff;
   margin-left: -4px;
-}
+  background-color: #25272b;
+  }
 
 li.collapsible > a.activelink:hover {
   border-left: none!important;

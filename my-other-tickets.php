@@ -74,7 +74,9 @@
         <tbody>
           <?php
             //all my cancelled/rejecetd tickets
-            $query = "SELECT * FROM ticket_t LEFT JOIN service_ticket_t USING (ticket_id) LEFT JOIN user_access_ticket_t USING (ticket_id) LEFT JOIN sla_t sev ON sev.id = ticket_t.severity_level LEFT JOIN ticket_status_t stat ON stat.status_id = ticket_t.ticket_status WHERE (stat.ticket_status = 'Cancelled' OR stat.ticket_status='Rejected)' AND ticket_t.user_id = '".$_SESSION['user_id']."'";
+            $sessionowner = $_SESSION['user_id'];
+
+            $query = "SELECT * FROM ticket_t LEFT JOIN service_ticket_t USING (ticket_id) LEFT JOIN user_access_ticket_t USING (ticket_id) LEFT JOIN sla_t sev ON sev.id = ticket_t.severity_level LEFT JOIN ticket_status_t stat ON stat.status_id = ticket_t.ticket_status WHERE (stat.ticket_status = 'Cancelled' OR stat.ticket_status='Rejected') AND ticket_t.user_id = $sessionowner";
             $stat = 'Closed';
             include 'templates/my-tickets-sorter.php';
 

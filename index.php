@@ -112,12 +112,12 @@
               <script>window.location.assign('changepassword.php')</script>
             <?php  }
             else {
-              if($user_type === 'Techinian'){ ?>
+              if($user_type != "Requestor" AND $user_type != "Administrator"){ ?>
                 <script>window.location.assign('review-incoming-tickets.php')</script>
-              <?php } ?>
+              <?php } else { ?>
               <script>window.location.assign('home.php')</script>
 
-            <?php }}else{
+            <?php }}}else{
               echo '<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>';
               echo '<script type="text/javascript">';
               echo 'setTimeout(function () { swal("Login Error!","Incorrect login details","error");';

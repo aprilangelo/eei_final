@@ -12,7 +12,7 @@
       </div>
       <li><a class="waves-effect" href="home.php"><i class="tiny material-icons">home</i>Home</a></li>
       <!-- My Tickets -->
-      <ul class="collapsible collapsible-accordion">
+      <ul id="my-auto-down" class="collapsible collapsible-accordion">
         <li><a class="collapsible-header waves-effect tooltipped" data-position="right" data-delay="50" data-tooltip="Tickets I submitted" href="#!"><i class="tiny material-icons">receipt</i>My Tickets</a>
           <div class="collapsible-body">
             <ul>
@@ -140,7 +140,7 @@
         </ul>
 
       <?php } elseif($_SESSION['user_type'] == 'Requestor'){ ?>
-        <ul class="collapsible collapsible-accordion">
+        <ul id="auto-down" class="collapsible collapsible-accordion">
           <li><a class="collapsible-header tooltipped" data-position="right"  data-tooltip="Tickets of all requestors"  href="#!"><i class="tiny material-icons">view_list</i>Tickets for Review</a>
             <div class="collapsible-body">
               <ul>
@@ -182,7 +182,7 @@
         </ul>
 
       <?php } elseif($_SESSION['user_type'] == 'Technicals Group Manager'){ ?>
-        <ul class="collapsible collapsible-accordion">
+        <ul id="auto-down" class="collapsible collapsible-accordion">
           <li><a class="collapsible-header tooltipped" data-position="right" data-tooltip="Tickets of my team"  href="#!"><i class="tiny material-icons">storage</i>Technicals Tickets</a>
             <div class="collapsible-body">
               <ul>
@@ -293,7 +293,7 @@
         <li><a class="waves-effect" href="knowledgebase.php"><i class="tiny material-icons">book</i>Knowledge Base</a></li>
 
       <?php } elseif($_SESSION['user_type'] == 'Network Group Manager'){?>
-        <ul class="collapsible collapsible-accordion">
+        <ul id="auto-down" class="collapsible collapsible-accordion">
           <li><a class="collapsible-header tooltipped" data-position="right" data-delay="50" data-tooltip="Tickets of my team"  href="#!"><i class="tiny material-icons">network_check</i>Network Tickets</a>
             <div class="collapsible-body">
               <ul>
@@ -349,7 +349,7 @@
         </ul>
 
       <?php } elseif($_SESSION['user_type'] == 'Technician' OR $_SESSION['user_type'] == 'Network Engineer'){ ?>
-        <ul class="collapsible collapsible-accordion">
+        <ul id="auto-down" class="collapsible collapsible-accordion">
           <li><a class="collapsible-header tooltipped" data-position="right" data-delay="50" data-tooltip="Tickets of my team"  href="#!"><i class="tiny material-icons">phonelink_setup</i> Assigned Tickets</a>
             <div class="collapsible-body">
               <ul>
