@@ -94,7 +94,7 @@
               <ul>
                 <li class="collapsible"><a href="review-incoming-tickets.php">Incoming
                   <?php
-                    $query = "SELECT COUNT(*) AS count FROM ticket_t LEFT JOIN service_ticket_t USING (ticket_id) LEFT JOIN user_access_ticket_t USING (ticket_id) WHERE (ticket_t.ticket_category is NULL AND ticket_t.severity_level is NULL AND ticket_t.ticket_type ='Service') OR (ticket_t.ticket_status = 5 AND ticket_t.it_group_manager_id IS NULL) OR (ticket_t.ticket_category is NULL AND ticket_t.severity_level is NULL AND user_access_ticket_t.isApproved=true)";
+                    $query = "SELECT COUNT(*) AS count FROM ticket_t LEFT JOIN service_ticket_t USING (ticket_id) LEFT JOIN user_access_ticket_t USING (ticket_id) WHERE (ticket_t.ticket_category is NULL AND ticket_t.severity_level is NULL AND ticket_t.ticket_type ='Service') OR (ticket_t.ticket_status = 5 AND ticket_t.it_group_manager_id IS NULL) OR (ticket_t.ticket_category is NULL AND ticket_t.severity_level is NULL AND ((user_access_ticket_t.isChecked = true AND user_access_ticket_t.isApproved=true) OR (user_access_ticket_t.checker IS NULL AND user_access_ticket_t.isApproved = true)))";
 
                     $result = mysqli_query($db,$query);
                     while($row = mysqli_fetch_assoc($result)){ ?>
@@ -147,7 +147,8 @@
                 <li class="collapsible"><a href="review-incoming-tickets.php">Incoming
                     <?php
                       $id = $_SESSION['user_id'];
-                      $query = "SELECT COUNT(*) as count FROM ticket_t LEFT JOIN service_ticket_t USING (ticket_id) LEFT JOIN user_access_ticket_t USING (ticket_id) LEFT JOIN sla_t sev ON sev.id = ticket_t.severity_level LEFT JOIN ticket_status_t stat ON stat.status_id = ticket_t.ticket_status WHERE (user_access_ticket_t.checker = $id AND user_access_ticket_t.isChecked is NULL) OR (user_access_ticket_t.approver=$id AND ticket_t.ticket_status=2)";
+                      $query = "SELECT COUNT(*) as count FROM ticket_t t LEFT JOIN service_ticket_t st USING (ticket_id) LEFT JOIN user_access_ticket_t uat USING (ticket_id) LEFT JOIN sla_t sev ON sev.id = t.severity_level LEFT JOIN ticket_status_t stat ON stat.status_id = t.ticket_status WHERE ((uat.checker = $id AND uat.isChecked is NULL) OR (uat.approver=$id AND uat.isApproved IS NULL AND uat.checker IS NULL) OR (stat.ticket_status = 'Checked' AND uat.isApproved IS NULL AND uat.approver=$id))";
+
 
                       $result = mysqli_query($db,$query);
                       while($row = mysqli_fetch_assoc($result)){ ?>
@@ -189,7 +190,7 @@
                 <li class="collapsible"><a href="review-incoming-tickets.php">Incoming
                   <?php
                       $id = $_SESSION['user_id'];
-                      $query = "SELECT COUNT(*) as count FROM ticket_t WHERE ticket_category='Technicals' AND ticket_status=5 AND ticket_t.it_group_manager_id = '".$_SESSION['user_id']."'";
+                      $query = "SELECT COUNT(*) as count FROM ticket_t t LEFT JOIN service_ticket_t st USING (ticket_id) LEFT JOIN user_access_ticket_t uat USING (ticket_id) LEFT JOIN sla_t sev ON sev.id = t.severity_level LEFT JOIN ticket_status_t stat ON stat.status_id = t.ticket_status WHERE (t.ticket_status = 5 AND t.it_group_manager_id = '$id') OR (uat.checker='$id' AND uat.isChecked IS NULL) OR (uat.approver = '$id' AND uat.isApproved IS NULL AND uat.checker IS NULL) OR (stat.ticket_status = 'Checked' AND uat.isApproved IS NULL AND uat.approver='$id')";
                       $result = mysqli_query($db,$query); ?>
                         <?php while($row = mysqli_fetch_assoc($result)){ ?>
                           <span class="badge ticket_count"> <?php echo $row['count'] ?></span>
@@ -197,7 +198,8 @@
                 </a></li>
                 <li class="collapsible"><a href="review-assigned-tickets.php">Assigned
                   <?php
-                      $query = "SELECT COUNT(*) AS count FROM ticket_t WHERE ticket_category='Technicals' AND ticket_status=6";
+                      $id = $_SESSION['user_id'];
+                      $query = "SELECT COUNT(*) as count FROM ticket_t t LEFT JOIN service_ticket_t st USING (ticket_id) LEFT JOIN user_access_ticket_t uat USING (ticket_id) LEFT JOIN sla_t sev ON sev.id = t.severity_level LEFT JOIN ticket_status_t stat ON stat.status_id = t.ticket_status WHERE t.ticket_status = 6 AND (t.it_group_manager_id = '$id' OR uat.checker='$id' OR uat.approver = '$id')";
 
                       $result = mysqli_query($db,$query); ?>
                         <?php while($row = mysqli_fetch_assoc($result)){ ?>
@@ -206,7 +208,7 @@
                 </a></li>
                 <li class="collapsible"><a href="review-resolved-tickets.php">Resolved
                   <?php
-                      $query = "SELECT COUNT(*) AS count FROM ticket_t WHERE ticket_category='Technicals' AND ticket_status=7";
+                      $query = "SELECT COUNT(*) as count FROM ticket_t t LEFT JOIN service_ticket_t st USING (ticket_id) LEFT JOIN user_access_ticket_t uat USING (ticket_id) LEFT JOIN sla_t sev ON sev.id = t.severity_level LEFT JOIN ticket_status_t stat ON stat.status_id = t.ticket_status WHERE t.ticket_status = 7 AND (t.it_group_manager_id = '$id' OR uat.checker='$id' OR uat.approver = '$id')";
                       $result = mysqli_query($db,$query); ?>
                         <?php while($row = mysqli_fetch_assoc($result)){ ?>
                           <span class="badge ticket_count"> <?php echo $row['count'] ?></span>
@@ -214,7 +216,8 @@
                 </a></li>
                 <li class="collapsible"><a href="review-closed-tickets.php">Closed
                   <?php
-                      $query = "SELECT COUNT(*) AS count FROM ticket_t WHERE ticket_category='Technicals' AND ticket_status=8";
+                      $id = $_SESSION['user_id'];
+                      $query = "SELECT COUNT(*) as count FROM ticket_t t LEFT JOIN service_ticket_t st USING (ticket_id) LEFT JOIN user_access_ticket_t uat USING (ticket_id) LEFT JOIN sla_t sev ON sev.id = t.severity_level LEFT JOIN ticket_status_t stat ON stat.status_id = t.ticket_status WHERE t.ticket_status = 8 AND (t.it_group_manager_id = '$id' OR uat.checker='$id' OR uat.approver = '$id')";
                       $result = mysqli_query($db,$query); ?>
                         <?php while($row = mysqli_fetch_assoc($result)){ ?>
                           <span class="badge ticket_count"> <?php echo $row['count'] ?></span>
@@ -223,7 +226,7 @@
                 <li class="collapsible"><a href="review-tickets.php">All
                   <?php
                       $id = $_SESSION['user_id'];
-                      $query = "SELECT COUNT(*) as count FROM ticket_t WHERE ticket_status >= 5 AND ticket_status < 9 AND ticket_category='Technicals'";
+                      $query = "SELECT COUNT(*) as count FROM ticket_t t LEFT JOIN service_ticket_t st USING (ticket_id) LEFT JOIN user_access_ticket_t uat USING (ticket_id) LEFT JOIN sla_t sev ON sev.id = t.severity_level LEFT JOIN ticket_status_t stat ON stat.status_id = t.ticket_status WHERE t.ticket_status >= 5 AND (t.it_group_manager_id = '$id' OR (uat.checker='$id' AND uat.isChecked = true) OR (uat.approver = '$id' AND uat.isApproved = true))";
                       $result = mysqli_query($db,$query); ?>
                         <?php while($row = mysqli_fetch_assoc($result)){ ?>
                           <span class="badge ticket_count"> <?php echo $row['count'] ?></span>
@@ -242,7 +245,7 @@
                 <li class="collapsible"><a href="review-incoming-tickets.php">Incoming
                   <?php
                       $id = $_SESSION['user_id'];
-                      $query = "SELECT COUNT(*) AS count FROM ticket_t WHERE ticket_category='Access' AND ticket_status=5 AND ticket_t.it_group_manager_id = '".$_SESSION['user_id']."'";
+                      $query = "SELECT COUNT(*) as count FROM ticket_t t LEFT JOIN service_ticket_t st USING (ticket_id) LEFT JOIN user_access_ticket_t uat USING (ticket_id) LEFT JOIN sla_t sev ON sev.id = t.severity_level LEFT JOIN ticket_status_t stat ON stat.status_id = t.ticket_status WHERE (t.ticket_status = 5 AND t.it_group_manager_id = '$id') OR (uat.checker='$id' AND uat.isChecked IS NULL) OR (uat.approver = '$id' AND uat.isApproved IS NULL AND uat.checker IS NULL) OR (stat.ticket_status = 'Checked' AND uat.isApproved IS NULL AND uat.approver='$id')";
                       $result = mysqli_query($db,$query); ?>
                         <?php while($row = mysqli_fetch_assoc($result)){ ?>
                           <span class="badge ticket_count"> <?php echo $row['count'] ?></span>
@@ -250,7 +253,8 @@
                 </a></li>
                 <li class="collapsible"><a href="review-assigned-tickets.php">Assigned
                   <?php
-                      $query = "SELECT COUNT(*) AS count FROM ticket_t WHERE ticket_category='Access' AND ticket_status=6";
+                  $id = $_SESSION['user_id'];
+                  $query = "SELECT COUNT(*) as count FROM ticket_t t LEFT JOIN service_ticket_t st USING (ticket_id) LEFT JOIN user_access_ticket_t uat USING (ticket_id) LEFT JOIN sla_t sev ON sev.id = t.severity_level LEFT JOIN ticket_status_t stat ON stat.status_id = t.ticket_status WHERE t.ticket_status = 6 AND (t.it_group_manager_id = '$id' OR uat.checker='$id' OR uat.approver = '$id')";
 
                       $result = mysqli_query($db,$query); ?>
                         <?php while($row = mysqli_fetch_assoc($result)){ ?>
@@ -259,7 +263,8 @@
                 </a></li>
                 <li class="collapsible"><a href="review-resolved-tickets.php">Resolved
                   <?php
-                      $query = "SELECT COUNT(*) AS count FROM ticket_t WHERE ticket_category='Access' AND ticket_status=7";
+                  $id = $_SESSION['user_id'];
+                  $query = "SELECT COUNT(*) as count FROM ticket_t t LEFT JOIN service_ticket_t st USING (ticket_id) LEFT JOIN user_access_ticket_t uat USING (ticket_id) LEFT JOIN sla_t sev ON sev.id = t.severity_level LEFT JOIN ticket_status_t stat ON stat.status_id = t.ticket_status WHERE t.ticket_status = 7 AND (t.it_group_manager_id = '$id' OR uat.checker='$id' OR uat.approver = '$id')";
 
                       $result = mysqli_query($db,$query); ?>
                         <?php while($row = mysqli_fetch_assoc($result)){ ?>
@@ -268,7 +273,8 @@
                 </a></li>
                 <li class="collapsible"><a href="review-closed-tickets.php">Closed
                   <?php
-                    $query = "SELECT COUNT(*) AS count FROM ticket_t t WHERE ticket_category='Access' AND ticket_status=8";
+                  $id = $_SESSION['user_id'];
+                  $query = "SELECT COUNT(*) as count FROM ticket_t t LEFT JOIN service_ticket_t st USING (ticket_id) LEFT JOIN user_access_ticket_t uat USING (ticket_id) LEFT JOIN sla_t sev ON sev.id = t.severity_level LEFT JOIN ticket_status_t stat ON stat.status_id = t.ticket_status WHERE t.ticket_status = 8 AND (t.it_group_manager_id = '$id' OR uat.checker='$id' OR uat.approver = '$id')";
 
                       $result = mysqli_query($db,$query); ?>
                         <?php while($row = mysqli_fetch_assoc($result)){ ?>
@@ -277,8 +283,8 @@
                 </a></li>
                 <li class="collapsible"><a href="review-tickets.php">All
                   <?php
-                      $id = $_SESSION['user_id'];
-                      $query = "SELECT COUNT(*) AS count FROM ticket_t WHERE ticket_category = 'Access' AND ticket_status >= 5 AND ticket_status < 9";
+                  $id = $_SESSION['user_id'];
+                  $query = "SELECT COUNT(*) as count FROM ticket_t t LEFT JOIN service_ticket_t st USING (ticket_id) LEFT JOIN user_access_ticket_t uat USING (ticket_id) LEFT JOIN sla_t sev ON sev.id = t.severity_level LEFT JOIN ticket_status_t stat ON stat.status_id = t.ticket_status WHERE t.ticket_status >= 5 AND (t.it_group_manager_id = '$id' OR (uat.checker='$id' AND uat.isChecked = true) OR (uat.approver = '$id' AND uat.isApproved = true))";
 
                       $result = mysqli_query($db,$query); ?>
                         <?php while($row = mysqli_fetch_assoc($result)){ ?>
@@ -300,7 +306,7 @@
                 <li class="collapsible"><a href="review-incoming-tickets.php">Incoming
                   <?php
                       $id = $_SESSION['user_id'];
-                      $query = "SELECT COUNT(*) AS count FROM ticket_t WHERE ticket_category='Network' AND ticket_status=5 AND ticket_t.it_group_manager_id = '".$_SESSION['user_id']."'";
+                      $query = "SELECT COUNT(*) as count FROM ticket_t t LEFT JOIN service_ticket_t st USING (ticket_id) LEFT JOIN user_access_ticket_t uat USING (ticket_id) LEFT JOIN sla_t sev ON sev.id = t.severity_level LEFT JOIN ticket_status_t stat ON stat.status_id = t.ticket_status WHERE (t.ticket_status = 5 AND t.it_group_manager_id = '$id') OR (uat.checker='$id' AND uat.isChecked IS NULL) OR (uat.approver = '$id' AND uat.isApproved IS NULL AND uat.checker IS NULL) OR (stat.ticket_status = 'Checked' AND uat.isApproved IS NULL AND uat.approver=$id))";
                       $result = mysqli_query($db,$query); ?>
                         <?php while($row = mysqli_fetch_assoc($result)){ ?>
                           <span class="badge ticket_count"> <?php echo $row['count'] ?></span>
@@ -308,7 +314,8 @@
                 </a></li>
                 <li class="collapsible"><a href="review-assigned-tickets.php">Assigned
                   <?php
-                      $query = "SELECT COUNT(*) AS count FROM ticket_t WHERE ticket_category='Network'AND ticket_status=6";
+                  $id = $_SESSION['user_id'];
+                  $query = "SELECT COUNT(*) as count FROM ticket_t t LEFT JOIN service_ticket_t st USING (ticket_id) LEFT JOIN user_access_ticket_t uat USING (ticket_id) LEFT JOIN sla_t sev ON sev.id = t.severity_level LEFT JOIN ticket_status_t stat ON stat.status_id = t.ticket_status WHERE t.ticket_status = 6 AND (t.it_group_manager_id = '$id' OR uat.checker='$id' OR uat.approver = '$id')";
 
                       $result = mysqli_query($db,$query); ?>
                         <?php while($row = mysqli_fetch_assoc($result)){ ?>
@@ -317,7 +324,8 @@
                 </a></li>
                 <li class="collapsible"><a href="review-resolved-tickets.php">Resolved
                   <?php
-                      $query = "SELECT COUNT(*) AS count FROM ticket_t WHERE ticket_category='Network'AND ticket_status=7";
+                  $id = $_SESSION['user_id'];
+                  $query = "SELECT COUNT(*) as count FROM ticket_t t LEFT JOIN service_ticket_t st USING (ticket_id) LEFT JOIN user_access_ticket_t uat USING (ticket_id) LEFT JOIN sla_t sev ON sev.id = t.severity_level LEFT JOIN ticket_status_t stat ON stat.status_id = t.ticket_status WHERE t.ticket_status = 7 AND (t.it_group_manager_id = '$id' OR uat.checker='$id' OR uat.approver = '$id')";
 
                       $result = mysqli_query($db,$query); ?>
                         <?php while($row = mysqli_fetch_assoc($result)){ ?>
@@ -326,7 +334,8 @@
                 </a></li>
                 <li class="collapsible"><a href="review-closed-tickets.php">Closed
                   <?php
-                    $query = "SELECT COUNT(*) AS count FROM ticket_t WHERE ticket_category='Network'AND ticket_status=8";
+                  $id = $_SESSION['user_id'];
+                  $query = "SELECT COUNT(*) as count FROM ticket_t t LEFT JOIN service_ticket_t st USING (ticket_id) LEFT JOIN user_access_ticket_t uat USING (ticket_id) LEFT JOIN sla_t sev ON sev.id = t.severity_level LEFT JOIN ticket_status_t stat ON stat.status_id = t.ticket_status WHERE t.ticket_status = 8 AND (t.it_group_manager_id = '$id' OR uat.checker='$id' OR uat.approver = '$id')";
 
                       $result = mysqli_query($db,$query); ?>
                         <?php while($row = mysqli_fetch_assoc($result)){ ?>
@@ -336,7 +345,7 @@
                 <li class="collapsible"><a href="review-tickets.php">All
                   <?php
                       $id = $_SESSION['user_id'];
-                      $query = "SELECT COUNT(*) AS count FROM ticket_t WHERE ticket_category='Network' AND ticket_status >= 5 AND ticket_status < 9";
+                      $query = "SELECT COUNT(*) as count FROM ticket_t t LEFT JOIN service_ticket_t st USING (ticket_id) LEFT JOIN user_access_ticket_t uat USING (ticket_id) LEFT JOIN sla_t sev ON sev.id = t.severity_level LEFT JOIN ticket_status_t stat ON stat.status_id = t.ticket_status WHERE t.ticket_status >= 5 AND (t.it_group_manager_id = '$id' OR (uat.checker='$id' AND uat.isChecked = true) OR (uat.approver = '$id' AND uat.isApproved = true))";
 
                       $result = mysqli_query($db,$query); ?>
                         <?php while($row = mysqli_fetch_assoc($result)){ ?>
@@ -356,7 +365,8 @@
                 <li class="collapsible"><a href="review-incoming-tickets.php">Incoming
                   <?php
                       $id = $_SESSION['user_id'];
-                      $query = "SELECT COUNT(*) AS count FROM ticket_t WHERE ticket_agent_id=$id AND ticket_status=6";
+                      $query = "SELECT COUNT(*) as count FROM ticket_t LEFT JOIN service_ticket_t USING (ticket_id) LEFT JOIN user_access_ticket_t uat USING (ticket_id) LEFT JOIN sla_t sev ON sev.id = ticket_t.severity_level LEFT JOIN ticket_status_t stat ON stat.status_id = ticket_t.ticket_status WHERE (ticket_t.ticket_status = 6 AND ticket_t.ticket_agent_id = '$id') OR (uat.checker='$id' AND uat.isChecked IS NULL) OR (uat.approver = '$id' AND uat.isApproved IS NULL AND uat.checker IS NULL) OR (stat.ticket_status = 'Checked' AND uat.isApproved IS NULL AND uat.approver='$id')";
+
                       $result = mysqli_query($db,$query); ?>
                         <?php while($row = mysqli_fetch_assoc($result)){ ?>
                           <span class="badge ticket_count"> <?php echo $row['count'] ?></span>
@@ -364,8 +374,8 @@
                 </a></li>
                 <li class="collapsible"><a href="review-resolved-tickets.php">Resolved
                   <?php
-                      $query = "SELECT COUNT(*) AS count FROM ticket_t WHERE ticket_agent_id=$id AND ticket_status=7";
-
+                      $id = $_SESSION['user_id'];
+                      $query = "SELECT COUNT(*) as count FROM ticket_t LEFT JOIN service_ticket_t USING (ticket_id) LEFT JOIN user_access_ticket_t uat USING (ticket_id) LEFT JOIN sla_t sev ON sev.id = ticket_t.severity_level LEFT JOIN ticket_status_t stat ON stat.status_id = ticket_t.ticket_status WHERE ticket_t.ticket_status = 7 AND (ticket_t.ticket_agent_id = '$id' OR uat.checker='$id' OR uat.approver = '$id')";
                       $result = mysqli_query($db,$query); ?>
                         <?php while($row = mysqli_fetch_assoc($result)){ ?>
                           <span class="badge ticket_count"> <?php echo $row['count'] ?></span>
@@ -373,7 +383,8 @@
                 </a></li>
                 <li class="collapsible"><a href="review-closed-tickets.php">Closed
                   <?php
-                      $query = "SELECT COUNT(*) AS count FROM ticket_t WHERE ticket_agent_id=$id AND ticket_status=8";
+                  $id = $_SESSION['user_id'];
+                  $query = "SELECT COUNT(*) as count FROM ticket_t LEFT JOIN service_ticket_t USING (ticket_id) LEFT JOIN user_access_ticket_t uat USING (ticket_id) LEFT JOIN sla_t sev ON sev.id = ticket_t.severity_level LEFT JOIN ticket_status_t stat ON stat.status_id = ticket_t.ticket_status WHERE ticket_t.ticket_status = 8 AND (ticket_t.ticket_agent_id = '$id' OR uat.checker='$id' OR uat.approver = '$id')";
                       $result = mysqli_query($db,$query); ?>
                         <?php while($row = mysqli_fetch_assoc($result)){ ?>
                           <span class="badge ticket_count"> <?php echo $row['count'] ?></span>
@@ -381,8 +392,8 @@
                 </a></li>
                 <li class="collapsible"><a href="review-tickets.php">All
                   <?php
-                      $id = $_SESSION['user_id'];
-                      $query = "SELECT COUNT(*) AS count FROM ticket_t WHERE ticket_agent_id=$id";
+                  $id = $_SESSION['user_id'];
+                  $query = "SELECT COUNT(*) as count FROM ticket_t LEFT JOIN service_ticket_t USING (ticket_id) LEFT JOIN user_access_ticket_t uat USING (ticket_id) LEFT JOIN sla_t sev ON sev.id = ticket_t.severity_level LEFT JOIN ticket_status_t stat ON stat.status_id = ticket_t.ticket_status WHERE ticket_t.ticket_status >= 6 AND (ticket_t.ticket_agent_id = '$id' OR (uat.checker='$id' AND uat.isChecked = true) OR (uat.approver = '$id' AND uat.isApproved = true))";
 
                       $result = mysqli_query($db,$query); ?>
                         <?php while($row = mysqli_fetch_assoc($result)){ ?>
@@ -394,7 +405,10 @@
           </li>
         </ul>
       <?php }; ?>
+      <li><a class="waves-effect help-support" href="support.php"><i class="tiny material-icons">help_outline</i>Help and Support</a></li>
+
     </ul>
+
 
     <!-- Hamburger menu icon when screen resized -->
     <a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a>

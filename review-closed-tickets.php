@@ -25,13 +25,16 @@
               $query = "SELECT COUNT(*) as count FROM ticket_t WHERE ticket_t.ticket_status=8";
             }
             else if ($_SESSION['user_type'] == "Access Group Manager"){
-              $query = "SELECT COUNT(*) as count FROM ticket_t t WHERE t.ticket_status=8 AND t.ticket_category='Access'";
+              $id = $_SESSION['user_id'];
+              $query = "SELECT COUNT(*) as count FROM ticket_t t LEFT JOIN service_ticket_t st USING (ticket_id) LEFT JOIN user_access_ticket_t uat USING (ticket_id) LEFT JOIN sla_t sev ON sev.id = t.severity_level LEFT JOIN ticket_status_t stat ON stat.status_id = t.ticket_status WHERE t.ticket_status = 8 AND (t.it_group_manager_id = '$id' OR uat.checker='$id' OR uat.approver = '$id')";
             }
             else if ($_SESSION['user_type'] == "Technicals Group Manager"){
-              $query = "SELECT COUNT(*) as count FROM ticket_t t WHERE t.ticket_status=8 AND t.ticket_category='Technicals'";
+              $id = $_SESSION['user_id'];
+              $query = "SELECT COUNT(*) as count FROM ticket_t t LEFT JOIN service_ticket_t st USING (ticket_id) LEFT JOIN user_access_ticket_t uat USING (ticket_id) LEFT JOIN sla_t sev ON sev.id = t.severity_level LEFT JOIN ticket_status_t stat ON stat.status_id = t.ticket_status WHERE t.ticket_status = 8 AND (t.it_group_manager_id = '$id' OR uat.checker='$id' OR uat.approver = '$id')";
             }
             else if ($_SESSION['user_type'] == "Network Group Manager"){
-              $query = "SELECT COUNT(*) as count FROM ticket_t t WHERE t.ticket_status=8 AND t.ticket_category='Network'";
+              $id = $_SESSION['user_id'];
+              $query = "SELECT COUNT(*) as count FROM ticket_t t LEFT JOIN service_ticket_t st USING (ticket_id) LEFT JOIN user_access_ticket_t uat USING (ticket_id) LEFT JOIN sla_t sev ON sev.id = t.severity_level LEFT JOIN ticket_status_t stat ON stat.status_id = t.ticket_status WHERE t.ticket_status = 8 AND (t.it_group_manager_id = '$id' OR uat.checker='$id' OR uat.approver = '$id')";
             }
             else if ($_SESSION['user_type'] == "Technician"){
               $query = "SELECT COUNT(*) as count FROM ticket_t t WHERE t.ticket_status=8 AND t.ticket_agent_id = '".$_SESSION['user_id']."'";

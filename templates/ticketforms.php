@@ -155,8 +155,8 @@ $(document).ready(function(){
     <!-- Preloader and it's background. -->
     <div class="preloader-background">
       <div class="activity">
-        <h6>Sending e-mail to checker...</h6>
-        <p>This may take a few seconds</p>
+          <h6>Sending e-mail to reviewer..</h6>
+        <p align="center">This may take a few seconds</p>
       </div>
       <div class="progress">
        <div class="indeterminate">
@@ -183,7 +183,7 @@ $(document).ready(function(){
               <div class="row" id="request-form-row4">
                 <div class="col s12">
                   <div class="input-field" id="request-form">
-                    <input placeholder="Project Number" name="rc_no" type="number" required>
+                    <input class="tooltipped" data-position="left" data-delay="50" data-tooltip="5-digit Project Number" placeholder="Project Number" name="rc_no" type="number" required>
                     <label for="rc_no">R.C. Number</label>
                   </div>
                 </div>
@@ -223,7 +223,7 @@ $(document).ready(function(){
             <div class="col s12 m12 l12">
               <div class="row" id="request-form-row4">
                   <div class="input-field search-box" id="request-form">
-                    <input placeholder=" " name="checker" autocomplete="off" type="text" validate required>
+                    <input class="tooltipped" data-position="left" data-delay="50" data-tooltip="Assistant PM (if applicable)" placeholder=" " name="checker" autocomplete="off" type="text" validate>
                     <div class="result"></div>
                       <label for="approver">Checker *<i>optional</i></label>
                   </div>
@@ -232,7 +232,7 @@ $(document).ready(function(){
             <div class="col s12 m12 l12">
               <div class="row" id="request-form-row3">
                   <div class="input-field search-box" id="request-form">
-                    <input placeholder="Department's or Group's PM or Person-In-Charge" name="approver" autocomplete="off" type="text"  required>
+                    <input class="tooltipped" data-position="left" data-delay="50" data-tooltip="Direct Supervisor, PM or PIC" placeholder="Department's or Group's PM or Person-In-Charge" name="approver" autocomplete="off" type="text" required>
                     <div class="result"></div>
                     <label for="approver">Approver *<i>optional</i></label>
                   </div>
@@ -267,6 +267,7 @@ $(document).ready(function(){
             <input class="waves-effect waves-light" id="btn-cancel" name="cancel" type="submit" value="Cancel">
             <input class="waves-effect waves-light" id="btn-submit" name="submit" type="submit" value="Submit">
           </div>
+
 
         </div> <!-- End of row -->
 </form> <!-- End of User Access Request Form -->

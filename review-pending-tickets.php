@@ -25,21 +25,6 @@
             if($_SESSION['user_type'] == "Administrator"){
               $query = "SELECT COUNT(*) as count FROM ticket_t WHERE ticket_status=5";
             }
-            else if ($_SESSION['user_type'] == "Access Group Manager"){
-              $query = "SELECT COUNT(*) as count FROM ticket_t WHERE ticket_category='Access' AND ticket_status=5";
-            }
-            else if ($_SESSION['user_type'] == "Technicals Group Manager"){
-              $query = "SELECT COUNT(*) as count FROM ticket_t WHERE ticket_category='Technicals' AND ticket_status=5";
-            }
-            else if ($_SESSION['user_type'] == "Network Group Manager"){
-              $query = "SELECT COUNT(*) as count FROM ticket_t WHERE ticket_category='Network' AND ticket_status=5";
-            }
-            else if ($_SESSION['user_type'] == "Technician"){
-              $query = "SELECT COUNT(*) as count FROM ticket_t WHERE ticket_status=5 AND ticket_agent_id = '".$_SESSION['user_id']."'";
-            }
-            else if ($_SESSION['user_type'] == "Network Engineer"){
-              $query = "SELECT COUNT(*) as count FROM ticket_t WHERE ticket_status=5 AND ticket_agent_id = '".$_SESSION['user_id']."'";
-            }
 
             $result = mysqli_query($db,$query);
             while($row = mysqli_fetch_assoc($result)) { ?>

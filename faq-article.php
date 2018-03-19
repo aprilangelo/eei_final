@@ -29,6 +29,7 @@
         ?>
         <div class="col s12 m12 l12 table-header">
           <span class="table-title"><?php echo $category?> FAQ #<?php echo $articleID?></span>
+          <?php if($_SESSION['user_type'] == "Administrator"){ ?>
           <span id="actions">
             <a class="button-edit" href="faq-edit-article.php?id=<?php echo $articleID?>">Edit</a>
             <form id="delete-kb" name="confirm" method="post">
@@ -37,7 +38,7 @@
             </form>
             <!-- <a class="button-delete" href="php_processes/faq-delete.php?id=<?php echo $articleID?>">Delete</a> -->
           </span>
-
+          <?php } ?>
           <div class="col s12" id="breadcrumb">
             <?php switch ($category)
             {

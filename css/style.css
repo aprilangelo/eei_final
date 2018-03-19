@@ -5,6 +5,53 @@
   src: url(https://fonts.gstatic.com/s/materialicons/v36/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2) format('woff2');
 }
 
+nav i.material-icons {
+    display: inline-block!important;
+    font-size: 24px;
+    height: 56px;
+    line-height: 57px;
+    margin-right: -3px;
+}
+
+a#account_circle:hover{
+  color: white!important;
+  cursor: default;
+}
+
+a.help-support{
+  bottom: 8%;
+position: absolute;
+font-weight: 400;
+}
+/* span#user{
+  vertical-align: middle;
+}
+
+span#add{
+  background-color: #3761ec;
+  padding: 10px 8px;
+  border-left: 1px solid #2e54d1;
+  margin-left: 18px;
+  margin-right: 12px;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+}
+
+i.material-icons.add {
+    font-size: 20px;
+    vertical-align: bottom;
+}
+.new-ticket, .new-ticket:hover {
+    background-color: #4b75ff;
+    color: white;
+    display: initial!important;
+    padding: 10px 20px;
+    border-color: #4b75ff;
+    box-shadow: none;
+    vertical-align: middle!important;
+    border-radius: 2px;
+    font-size: 12px;
+  } */
 .material-icons {
   font-family: 'Material Icons';
   font-weight: normal;
@@ -551,14 +598,20 @@ border-top: none;
   border-color: #4b75ff;
   box-shadow: none;
 }
+a.service:hover, a.access:hover {
+    color: #212121!important;
+}
+.dropdown-content li > a:hover{
+  color: #212121!important;
 
+}
 .btn-invert:hover{
-  background-color: #4b6ace;
-  color: white;
+  background-color: #4b6ace!important;
+  color: white!important;
   padding: 0 10px 0 15px;
   border-color: #4b6ace;
   box-shadow: none;
-  height: 30px;
+  height: 31px;
   vertical-align: middle!important;
   line-height: 2.5;
   border-radius: 3px;
@@ -572,7 +625,7 @@ border-top: none;
   padding: 0 10px 0 15px;
   border-color: #4b75ff;
   box-shadow: none;
-  height: 30px;
+  height: 31px;
   vertical-align: middle!important;
   line-height: 2.5;
   border-radius: 3px;
@@ -580,6 +633,12 @@ border-top: none;
   margin-right: 20px;
 }
 
+nav ul a:hover {
+  color: #dddddd!important;
+  background-color: transparent;
+  display: -webkit-inline-box;
+  cursor: pointer;
+}
 nav ul a {
   vertical-align: middle!important;
 }
@@ -1150,12 +1209,11 @@ padding-right: 50px;
 
 span#notif{
   padding: 3px 6px 3px 6px;
-  display: initial;
-  font-size: 11px;
-  margin-left: -10px;
-  margin-top: -10px;
-  border-radius: 20px;
-  background-color: #F44336;
+      display: initial;
+      font-size: 11px;
+      margin-left: -10px;
+      border-radius: 20px;
+      background-color: #F44336;
 }
 div#ticket-details{
   padding: 0px 25px 25px 25px;
@@ -1450,8 +1508,14 @@ form#service, form#access, form#new-requestor{
 }
 
 /* for request_details attribute  */
-p#details, tbody#details{
+ tbody#details{
   font-size: 12px;
+  font-weight: 400;
+  line-height: 22px;
+
+}
+p#details{
+  font-size: 14px;
   font-weight: 400;
   line-height: 22px;
 
@@ -1668,6 +1732,7 @@ span.datediff-gray{
 
 nav ul#dropdownNotifications a:hover{
   background-color: #fbfbfb!important;
+  color: black!important;
 }
 
 span#db-panel-label-overdue, h3.db-panel-label-overdue{

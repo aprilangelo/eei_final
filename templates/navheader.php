@@ -67,7 +67,8 @@
         </ul>
 
           <!-- Dropdown Trigger for My Profile -->
-          <li><a class="dropdown-button hide-on-med-and-down" href="#!" data-activates="dropdown" data-beloworigin="true"><i class="medium material-icons" style="margin-right: 10px">account_circle</i><?php echo $_SESSION['first_name'] . ' '. $_SESSION['last_name'] ?><i class="right tiny material-icons" id="profile">keyboard_arrow_down</i></a></li>
+          <a disabled class="hide-on-med-and-down" id="account_circle" style="float:left; margin-right:-12px;"><i class="medium material-icons">account_circle</i></a>
+          <li><a class="dropdown-button hide-on-med-and-down" href="#!" data-activates="dropdown" data-beloworigin="true"><?php echo $_SESSION['first_name'] . ' '. $_SESSION['last_name'] ?><i class="right tiny material-icons" id="profile">keyboard_arrow_down</i></a></li>
           <!-- Dropdown Structure -->
           <ul id="dropdown" class="dropdown-content collection">
               <li><a href="myprofile.php">My Profile</a></li>
