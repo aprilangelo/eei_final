@@ -4,6 +4,7 @@ session_start();
 
 $db = mysqli_connect("localhost", "root", "", "eei_db");
 
+
 $a = mysqli_real_escape_string($db, $_POST['assignee']);
 $id = mysqli_real_escape_string($db, $_POST['id']);
 $logger = $_SESSION['user_id'];

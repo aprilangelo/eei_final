@@ -1,5 +1,6 @@
 <?php
-$db = mysqli_connect("localhost", "root", "", "eei_db");{
+$db = mysqli_connect("localhost", "root", "", "eei_db");
+{
 
 //if category button for sorting is selected
   switch ((isset($_GET['view']) ? $_GET['view'] : ''))

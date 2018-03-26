@@ -4,6 +4,7 @@ session_start();
 $db = mysqli_connect("localhost", "root", "", "eei_db");
 
 
+
 $ticketID = mysqli_real_escape_string($db, $_POST['ticketID']);
 // $request_details = mysqli_real_escape_string($db, $_POST['request_details']);
 
@@ -65,12 +66,12 @@ $mail = new PHPMailer(true);                              // Passing `true` enab
     $mail->isSMTP();                                      // Set mailer to use SMTP
     $mail->Host = "smtp.gmail.com";  // Specify main and backup SMTP servers
     $mail->SMTPAuth = true;                               // Enable SMTP authentication
-    $mail->Username = "dondumaliang@gmail.com";                 // SMTP username
-    $mail->Password = "tritondrive";                           // SMTP password
+    $mail->Username = "eeiserviceteam@gmail.com";                 // SMTP username
+    $mail->Password = "service@EEI1";                            // SMTP password
     $mail->Port = 587;                                    // TCP port to connect to
     $mail->SMTPSecure = "tls";
     //Recipients
-    $mail->setFrom("dondumaliang@gmail.com", "Donna Dumaliang");
+    $mail->setFrom("eeiserviceteam@gmail.com", "EEI Service Desk Team");
     $mail->addAddress($row2['email_address'], $row2['name']);     // Add a recipient
     $mail->addReplyTo("dondumaliang@gmail.com", "Donna Dumaliang");
 
@@ -90,7 +91,7 @@ $mail = new PHPMailer(true);                              // Passing `true` enab
 
        $row4['name'] . " is requesting for " . $row['access_requested']  . " access" .
        "<br> The Request has already been checked, kindly view and approve access request details through the EEI Service Desk website" .
-       "<br><br><a style=\"background-color: #4b75ff; padding: 13px; color:white; border-radius: 3px; display: block; width: 26%; text-decoration: none; margin: 0 auto;\" href=\"http://localhost/donna/details.php?id=\">Click here to go to website" . "</a><br><br>--<br><b>IT Service Desk Team</b>" . "</div></div>" .
+       "<br><br><a style=\"background-color: #4b75ff; padding: 13px; color:white; border-radius: 3px; display: block; width: 26%; text-decoration: none; margin: 0 auto;\" href=\"http://localhost/final-eei/details.php?id=\">Click here to go to website" . "</a><br><br>--<br><b>IT Service Desk Team</b>" . "</div></div>" .
 
       "<div style=\"background-color: #2d3033; font-size: 11px; padding: 20px 0px; color:white; text-align: center;\">Copyright &copy; 2018 EEI Corporation | No. 12 Manggahan street, Libis, Quezon City 1101 Metro Manila.</div>";
 

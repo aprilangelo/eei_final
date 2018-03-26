@@ -32,6 +32,7 @@ if(isset($_POST['userid']) && isset($_POST['password'])){
     if($firstlogin === NULL){ ?>
       <?php
         $db = mysqli_connect("localhost", "root", "", "eei_db");
+
         $usersession = $_SESSION['userid'];
         $islogin = "UPDATE user_t SET is_firstlogin = true WHERE userid = '$usersession'";
         if (!mysqli_query($db, $islogin))

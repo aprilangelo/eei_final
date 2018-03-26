@@ -1,6 +1,7 @@
 <!-- Header Navbar goes here -->
 <?php
    $db = mysqli_connect("localhost", "root", "", "eei_db");
+
    $count=0;
    $sql2 = "SELECT * FROM notification_t where user_id = '{$_SESSION['user_id']}' AND isSeen = 0";
    $result=mysqli_query($db, $sql2);
@@ -49,6 +50,7 @@
 
           <?php
           $db = mysqli_connect("localhost", "root", "", "eei_db");
+
 
           $sql="SELECT CONCAT(if( TIMESTAMPDIFF(day,n.timestamp,now())=0,'',concat(TIMESTAMPDIFF(day,n.timestamp,now()),'d ')) ,if(MOD( TIMESTAMPDIFF(hour,n.timestamp,now()), 24)=0,'',concat(MOD( TIMESTAMPDIFF(hour,n.timestamp,now()), 24), 'h ')), MOD( TIMESTAMPDIFF(minute,n.timestamp,now()), 60), 'm ago' ) as datediff, n.ticket_id, n.notification_id, n.notification_description, t.date_assigned FROM notification_t n LEFT JOIN ticket_t t ON n.ticket_id = t.ticket_id  WHERE n.user_id = '{$_SESSION['user_id']}' AND isRead = 0 ORDER BY n.notification_id DESC";
           $result=mysqli_query($db, $sql);

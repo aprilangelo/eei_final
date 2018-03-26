@@ -1,5 +1,6 @@
 <?php
-$db = mysqli_connect("localhost", "root", "", "eei_db");{
+$db = mysqli_connect("localhost", "root", "", "eei_db");
+{
 
 //All my inprogress tickets
 $query = "SELECT * FROM ticket_t LEFT JOIN service_ticket_t USING (ticket_id) LEFT JOIN user_access_ticket_t USING (ticket_id) WHERE ticket_t.ticket_status = 'In Progress' AND ticket_t.user_id = '".$_SESSION['user_id']."'";

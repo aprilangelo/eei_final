@@ -97,12 +97,12 @@
                       $interval = $date1->diff($date2);
                        ?>
                        <tr class='clickable-row' data-href="details.php?id=<?php echo $row['ticket_id']?>">
-
-                         <?php if ($date1<$date2) {?>
-                         <td><span class="<?php echo $class?>"> <?php echo $row['ticket_category'][0]?></span><p style="margin-top:27px;margin-bottom:-5px;font-size:8pt;"><?php echo $row['severity_level']?></p>
-                       <?php } else{?>
-                        <i id= "warning" class="material-icons">report</i> <p style="margin-top:27px;margin-bottom:-5px;font-size:8pt;"><?php echo $row['severity_level']?></p> <?php }?>
-                       </td>
+                         <td class="col-sevcat" id="type">
+                           <?php if ($date1<$date2) {?>
+                           <span class="<?php echo $class?>"> <?php echo $row['ticket_category'][0]?></span><p style="margin-top:27px;margin-bottom:-5px;font-size:8pt;"><?php echo $row['severity_level']?></p>
+                         <?php } else{?>
+                          <i id= "warning" class="material-icons">report</i> <p style="margin-top:27px;margin-bottom:-5px;font-size:8pt;"><?php echo $row['severity_level']?></p> <?php }?>
+                         </td>
                          <td class="col-ticketno"> <?php echo $row['ticket_number']?>  </td>
                          <td class="col-title"> <?php echo $row['ticket_title']?>   </td>
                          <td class="col-hidedatecreated"> <?php echo $row['date_prepared'] ?>  </td>
@@ -156,11 +156,12 @@
                     $interval = $date1->diff($date2);
                      ?>
                      <tr class='clickable-row' data-href="details.php?id=<?php echo $row['ticket_id']?>">
-                       <?php if ($date1<$date2) {?>
-                       <td><span class="<?php echo $class?>"> <?php echo $row['ticket_category'][0]?></span><p style="margin-top:27px;margin-bottom:-5px;font-size:8pt;"><?php echo $row['severity_level']?></p>
-                     <?php } else{?>
-                      <i id= "warning" class="material-icons">report</i> <p style="margin-top:27px;margin-bottom:-5px;font-size:8pt;"><?php echo $row['severity_level']?></p> <?php }?>
-                     </td>
+                       <td class="col-sevcat" id="type">
+                         <?php if ($date1<$date2) {?>
+                         <span class="<?php echo $class?>"> <?php echo $row['ticket_category'][0]?></span><p style="margin-top:27px;margin-bottom:-5px;font-size:8pt;"><?php echo $row['severity_level']?></p>
+                       <?php } else{?>
+                        <i id= "warning" class="material-icons">report</i> <p style="margin-top:27px;margin-bottom:-5px;font-size:8pt;"><?php echo $row['severity_level']?></p> <?php }?>
+                       </td>
                        <td class="col-ticketno"> <?php echo $row['ticket_number']?>  </td>
                        <td class="col-hidedatecreated"> <?php echo $row['date_prepared'] ?>  </td>
                        <td class="col-title"> <?php echo $row['ticket_title']?>   </td>

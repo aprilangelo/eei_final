@@ -2,6 +2,7 @@
 // include "../templates/dbconfig.php";
 session_start();
 $db = mysqli_connect("localhost", "root", "", "eei_db");
+
 $id = $_POST['id'];
 
 $query = "SELECT concat(first_name,last_name) as name FROM user_t WHERE user_id = $id";

@@ -1,6 +1,7 @@
 <?php
 session_start();
 $db = mysqli_connect("localhost", "root", "", "eei_db");
+
 $id = $_POST['id'];
 
 //id of cancelled is 9

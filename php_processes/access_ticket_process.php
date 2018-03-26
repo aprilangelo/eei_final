@@ -41,21 +41,35 @@ $requestorname .= " ";
 $requestorname .= $_SESSION['last_name'];
 $mail = new PHPMailer(true);
 
-if($checker!= NULL){
+
+if($checker!= NULL ){
   try{                           // Passing `true` enables exceptions
       //Server settings
+
+      //check if checker and approver exists
+      $query = "SELECT * FROM user_t WHERE CONCAT(first_name,' ',last_name)='$checker'";
+      $result = mysqli_query($db, $query);
+      $query2 = "SELECT * FROM user_t WHERE CONCAT(first_name,' ', last_name)='$approver'";
+      $result2 = mysqli_query($db, $query2);
+
+      if (( mysqli_num_rows($result2) == 0)|| (mysqli_num_rows($result) == 0) ){
+        echo json_encode(array('error','invalid checker/approver'));//Pretty error messages from PHPMailer
+        exit();
+      }
+      //end of checker
+
       $mail->isSMTP();
       $mail->getSMTPInstance()->Timelimit = 10;
       $mail->Host = "smtp.gmail.com";  // Specify main and backup SMTP servers
       $mail->SMTPAuth = true;                               // Enable SMTP authentication
-      $mail->Username = "dondumaliang@gmail.com";                 // SMTP username
-      $mail->Password = "tritondrive";                           // SMTP password
+      $mail->Username = "eeiserviceteam@gmail.com";                 // SMTP username
+      $mail->Password = "service@EEI1";                             // SMTP password
       $mail->Port = 587;
       $mail->Timeout = 1;                                  // TCP port to connect to
       $mail->SMTPSecure = "tls";
 
       //Recipients
-      $mail->setFrom("dondumaliang@gmail.com", "Donna Dumaliang");
+      $mail->setFrom("eeiserviceteam@gmail.com", "EEI Service Desk Team");
       $mail->addAddress($checkerEmail, $checker);     // Add a recipient
       $mail->addReplyTo("dondumaliang@gmail.com", "Donna Dumaliang");
 
@@ -64,7 +78,7 @@ if($checker!= NULL){
       $mail->isHTML(true);                                  // Set email format to HTML
       $mail->Subject = "Access Request for Review";
       $mail->AddEmbeddedImage('../img/email-header.png', 'email-header');    //Content
-  		$mail->Body = "<div style=\"background-color: #f5f5f5; padding: 50px\">" .
+      $mail->Body = "<div style=\"background-color: #f5f5f5; padding: 50px\">" .
 
       "<img style=\"display: block;  margin: 0 auto;\" src=\"cid:email-header\">" .
 
@@ -74,11 +88,12 @@ if($checker!= NULL){
 
          "$requestorname is requesting for access in " . $dp. " project/department." . "<br><br> As the checker assigned, kindly view and check the access request details through the EEI Service Desk website" .
 
-        "<br><br><a style=\"background-color: #4b75ff; padding: 13px; color:white; border-radius: 3px; display: block; width: 26%; text-decoration: none; margin: 0 auto;\" href=\"http://localhost/eei/details.php?id=\">Click here to go to website" . "</a><br><br>--<br><b>IT Service Desk Team</b>" . "</div></div>" .
+        "<br><br><a style=\"background-color: #4b75ff; padding: 13px; color:white; border-radius: 3px; display: block; width: 26%; text-decoration: none; margin: 0 auto;\" href=\"http://localhost/final-eei/details.php?id=\">Click here to go to website" . "</a><br><br>--<br><b>IT Service Desk Team</b>" . "</div></div>" .
 
         "<div style=\"background-color: #2d3033; font-size: 11px; padding: 20px 0px; color:white; text-align: center;\">Copyright &copy; 2018 EEI Corporation | No. 12 Manggahan street, Libis, Quezon City 1101 Metro Manila.</div>";
 
       $mail->send();
+
 
       date_default_timezone_set('Asia/Manila');
       //time
@@ -98,14 +113,21 @@ if($checker!= NULL){
       //weekend or weekday if >= 6 then weekend
       $w = $dt->format('N');
       $w2 = $dt2day->format('N');
-      if (strtotime($time)>=strtotime('15:00:00')) {
-        $query1 = "INSERT INTO ticket_t (ticket_id, ticket_title, ticket_type, date_prepared, ticket_status, user_id) VALUES(DEFAULT, '$request_title', 'User Access', '$datet', '1', '{$_SESSION['user_id']}')";
-      }
-      elseif(strtotime($time)<strtotime('08:00:00')) {
-        $query1 = "INSERT INTO ticket_t (ticket_id, ticket_title, ticket_type, date_prepared, ticket_status, user_id) VALUES(DEFAULT, '$request_title', 'User Access', '$dateToday', '1', '{$_SESSION['user_id']}')";
+      if ($w2<6) {
+        if (strtotime($time)>=strtotime('15:00:00')) {
+          $query1 = "INSERT INTO ticket_t (ticket_id, ticket_title, ticket_type, ticket_status, date_prepared, user_id) VALUES(DEFAULT, '$request_title', 'Service', '1', '$datet', '{$_SESSION['user_id']}')";
+        }
+
+        elseif(strtotime($time)<strtotime('08:00:00')) {
+          $query1 = "INSERT INTO ticket_t (ticket_id, ticket_title, ticket_type, ticket_status, date_prepared, user_id) VALUES(DEFAULT, '$request_title', 'Service', '1', '$dateToday', '{$_SESSION['user_id']}')";
+        }
+
+        else {
+          $query1 = "INSERT INTO ticket_t (ticket_id, ticket_title, ticket_type, ticket_status, date_prepared, user_id) VALUES(DEFAULT, '$request_title', 'Service', '1', '$curDate', '{$_SESSION['user_id']}')";
+        }
       }
       else {
-        $query1 = "INSERT INTO ticket_t (ticket_id, ticket_title, ticket_type, date_prepared, ticket_status, user_id) VALUES(DEFAULT, '$request_title', 'User Access', '$curDate', '1', '{$_SESSION['user_id']}')";
+        $query1 = "INSERT INTO ticket_t (ticket_id, ticket_title, ticket_type, ticket_status, date_prepared, user_id) VALUES(DEFAULT, '$request_title', 'Service', '1', '$datet', '{$_SESSION['user_id']}')";
       }
 
       if (!mysqli_query($db, $query1))
@@ -183,8 +205,8 @@ if($checker!= NULL){
       $mail->getSMTPInstance()->Timelimit = 10;
       $mail->Host = "smtp.gmail.com";  // Specify main and backup SMTP servers
       $mail->SMTPAuth = true;                               // Enable SMTP authentication
-      $mail->Username = "dondumaliang@gmail.com";                 // SMTP username
-      $mail->Password = "tritondrive";                           // SMTP password
+           $mail->Username = "eeiserviceteam@gmail.com";                 // SMTP username
+      $mail->Password = "service@EEI1";                           // SMTP password
       $mail->Port = 587;
       $mail->Timeout = 1;                                  // TCP port to connect to
       $mail->SMTPSecure = "tls";

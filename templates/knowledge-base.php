@@ -1,12 +1,17 @@
-<div class="col s12 m12 l12 table-header">
+
+<?php if($_SESSION['user_type'] != 'Requestor'){ ?>
+  <div class="col s12 m12 l12 table-header">
   <div class="row">
     <span class="table-title">Knowledge Base</span>
     <?php if($_SESSION['user_type'] == 'Administrator') {?>
-    <a id="addfaq" href="faq-add.php">Add Knowledge Base Article</a>
+    <a id="addfaq" href="faq-add.php" class="waves-effect waves-light btn-small"><i id="kb" class="tiny material-icons left">book</i>Add New Article</a>
+    <a id="addfaq" href="#modal-new-subcategory" class="waves-effect waves-light btn-small modal-trigger"><i id="kb" class="tiny material-icons left">library_books</i>Add Article Subcategory</a>
+
     <?php } ?>
 
   </div>
 </div>
+<?php } else {}?>
 
 <div id="knowledge-base">
 
@@ -24,7 +29,39 @@
 
 
     </div>
+    <div id="modal-new-subcategory" class="modal">
+  <form method='post' name="subcategory" id="subcategory">
+    <div class="modal-content">
+      <h5>Add Subcategory</h5>
 
+        <div id="add-subcategory" class="file-field input-field">
+            <input placeholder=" " class="title" name="subcategory_name" type="text" required>
+            <label for="title">Subcategory Name</label>
+            <div class="input-field ticket-properties" id="request-form-row6">
+              <?php
+                $db = mysqli_connect("localhost", "root", "", "eei_db");?>
+
+                <select name = "category" required>
+                <?php $get_user_type = mysqli_query($db, "SELECT column_type FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'ticket_t' AND COLUMN_NAME = 'ticket_category'");
+                $row2 = mysqli_fetch_array($get_user_type);
+                $enumList = explode(",", str_replace("'", "", substr($row2['column_type'], 5, (strlen($row2['column_type'])-6))));
+                foreach($enumList as $value){
+                  if ($value != $row['ticket_category']) {?>
+                    <option value='<?php echo $value?>'> <?php echo $value?> </option>
+                <?php  }?>
+
+                    <?php } ?>
+                </select>
+                <label for="title">Ticket Category</label>
+            </div>
+          </div>
+        </div>
+      <div class="modal-footer">
+        <button class="btn" id="" type="submit" name="submit">Create</button>
+        <a href="knowledgebase.php" class="btn modal-action modal-close">Close</a>
+      </div>
+  </form>
+  </div>
   </div>
   <br>
     <div class="row">

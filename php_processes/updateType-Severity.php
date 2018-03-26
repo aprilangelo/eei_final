@@ -3,6 +3,7 @@
 session_start();
 $db = mysqli_connect("localhost", "root", "", "eei_db");
 
+
 $category = mysqli_real_escape_string($db, $_POST['category']);
 $id = mysqli_real_escape_string($db, $_POST['id']);
 $severity= mysqli_real_escape_string($db,$_POST['severity']);

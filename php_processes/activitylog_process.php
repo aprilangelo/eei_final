@@ -1,6 +1,7 @@
 <?php
 session_start();
 $db = mysqli_connect("localhost", "root", "", "eei_db");
+
 // $name = $_REQUEST['name'];
 
 $logger = $_SESSION['user_id'];

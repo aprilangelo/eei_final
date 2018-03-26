@@ -7,6 +7,14 @@ $(document).ready(function(){
   $(".clickable-row").click(function() {
       window.location = $(this).data("href");
   });
+  $('.datepicker').pickadate({
+   selectMonths: true, // Creates a dropdown to control month
+   selectYears: 15, // Creates a dropdown of 15 years to control year,
+   today: 'Today',
+   clear: 'Clear',
+   close: 'Ok',
+   closeOnSelect: false // Close upon selecting a date,
+ });
 
 ///////////////////////////////////////////// GENERAL ///////////////////////////////////////////////////////
   //Setting Active Link on Current Page
@@ -35,6 +43,7 @@ $(document).ready(function(){
   var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
   $('#date_prepared').val(today);
   $('#date_prepared2').val(today);
+
 
   //Character Count Control for Ticket Title
   var max = 40;
@@ -115,7 +124,13 @@ $(document).ready(function(){
            },
           scales: {
             yAxes: [{
-              barThickness:45,
+              barThickness:15,
+              padding: {
+                  left: 50,
+                  right: 0,
+                  top: 0,
+                  bottom: 0
+              }
             }],
             xAxes: [{
               ticks: {
@@ -148,21 +163,22 @@ $(document).ready(function(){
          document.getElementById("result").style.display = "none";
      }
   });
-
   //Live dropdown searching for user access request form
-  $('.search-box input[type="text"]').on("keyup input", function(){
-      /* Get input value on change */
-      var inputVal = $(this).val();
-      var resultDropdown = $(this).siblings(".result");
-      if(inputVal.length){
-          $.get("php_processes/search.php", {term: inputVal}).done(function(data){
-              // Display the returned data in browser
-              resultDropdown.html(data);
-          });
-      } else{
-        resultDropdown.empty();
-      }
-  });
+    $('.search-box input[type="text"]').on("keyup input", function(){
+
+        /* Get input value on change */
+        var inputVal = $(this).val();
+        var resultDropdown = $(this).siblings(".result");
+        if(inputVal.length){
+            $.get("php_processes/search.php", {term: inputVal}).done(function(data){
+                // Display the returned data in browser
+                resultDropdown.html(data);
+            });
+        } else{
+          resultDropdown.empty();
+        }
+      
+    });
 
   // Set search input value on click of result item
   $(document).on("click", ".result p", function(){
@@ -355,7 +371,7 @@ $(document).ready(function(){
              ticketNo= JSON.parse(data);
              swal({
                 title: "Ticket Submitted!",
-                text: "Your ticket number is:" +ticketNo,
+                text: "Your ticket number is: " +ticketNo,
                 type: "success",
                 icon: "success"
             }).then(function(){
@@ -373,55 +389,68 @@ $(document).ready(function(){
 
   //Submit Access Ticket
   $("#access").submit(function(e) {
-    e.preventDefault();
-    swal({
-    title: "Submit ticket?",
-    text: "Make sure to review your submission before confirming.",
-    icon: "warning",
-    buttons: ["Close", "Submit"],
-    dangerMode: true,
-    }).then((willSubmit) => {
-      if(willSubmit){
-        $('.preloader-wrapper').show();
-        $('.preloader-background').show();
-        $.ajax({
-          url: 'php_processes/access_ticket_process.php',
-          type: 'POST',
-          data: $(this).serialize(),
-          dataType: 'json',
-          success:function(json) {
-            if (json[0]=='success') {
-              swal({
-                 title: "Submission Success!",
-                 text: "Your ticket number is:" +json[1],
-                 type: "success",
-                 icon: "success"
-               }).then(function(){
-                 window.location="my-tickets.php";
-               });
-            }
-            else {
-              swal({
-                 title: "Something went wrong!!",
-                 text: "Please try again" ,
-                 type: "error",
-                 icon: "error"
-               }).then(function(){
-                   $('.preloader-wrapper').hide();
-                    $('.preloader-background').hide();
-               });
-            }
-          },
-          complete: function(){
-            $('.preloader-wrapper').hide();
-          }
-       })
-     }else {
-       swal("", "Ticket not yet submitted!","error");
-     }
-   });
-  });
+      e.preventDefault();
+      swal({
+      title: "Submit ticket?",
+      text: "Make sure to review your submission before confirming.",
+      icon: "warning",
+      buttons: ["Close", "Submit"],
+      dangerMode: true,
+      }).then((willSubmit) => {
+        if(willSubmit){
+          $('.preloader-wrapper').show();
+          $('.preloader-background').show();
+          $.ajax({
+            url: 'php_processes/access_ticket_process.php',
+            type: 'POST',
+            data: $(this).serialize(),
+            dataType: 'json',
+            success:function(json) {
+              if (json[0]=='success') {
+                swal({
+                   title: "Submission Success!",
+                   text: "Your ticket number is: " +json[1],
+                   type: "success",
+                   icon: "success"
+                 }).then(function(){
+                   window.location="my-tickets.php";
+                 });
+              }
+              else {
+                if (json[1] == 'invalid checker/approver') {
+                  swal({
+                     title: "Something went wrong!!",
+                     text: "Invalid checker/approver" ,
+                     type: "error",
+                     icon: "error"
+                   }).then(function(){
+                       $('.preloader-wrapper').hide();
+                        $('.preloader-background').hide();
+                   });
+                }
+                else {
+                  swal({
+                     title: "Something went wrong!!",
+                     text: "Please try again" ,
+                     type: "error",
+                     icon: "error"
+                   }).then(function(){
+                       $('.preloader-wrapper').hide();
+                        $('.preloader-background').hide();
+                   });
+                }
 
+              }
+            },
+            complete: function(){
+              $('.preloader-wrapper').hide();
+            }
+         })
+       }else {
+         swal("", "Ticket not yet submitted!","error");
+       }
+     });
+    });
   //Confirm Ticket for Requestor
   $("#confirm").submit(function(e) {
     e.preventDefault();
@@ -451,6 +480,36 @@ $(document).ready(function(){
 
 
    });
+
+  //Reject Ticket for Requestor
+   $("#reject-resolution").submit(function(e) {
+     e.preventDefault();
+     swal({
+       title: "Reject this ticket?",
+       text: "Confirming this will officially reject the ticket.",
+       icon: "warning",
+       buttons: ["Cancel", "Confirm"],
+       dangerMode: true,
+     }).then((willConfirm) => {
+       if(willConfirm){
+         $.ajax({
+           url: 'php_processes/reject-resolution.php',
+           type: 'POST',
+           data: $(this).serialize(),
+           success: function(data)
+            {
+                swal("Ticket Rejected" , " ", "success").then(function(){
+                  location.reload();
+                });
+              }
+            })
+        } else {
+          swal("", "Ticket is not yet confirmed!","error");
+        }
+      });
+
+
+    });
 
   //Assign Category, Severity, Status of Ticket
   $("#properties").submit(function(e) {
@@ -802,3 +861,132 @@ $(document).ready(function(){
   });
 
 });
+
+//edit-sla
+var $old=[];
+
+$(".edit_sla").click(function(){
+      var td = $(this).closest('td');
+			var value = $(this).closest('tr').find('.information').attr('contenteditable','true');
+			$(this).hide();
+			$(this).closest('tr').find(".save_sla").show();
+      $(this).closest('tr').find('.information').each(function(){
+      $old.push($(this).text());
+     })
+
+		})
+$(".save_sla").click(function(){
+  var value = $(this).closest('tr').find('.information').attr('contenteditable','false');
+
+			$(this).hide();
+			$(".edit_sla").show();
+			var $item=[];
+			 $(this).closest('tr').find('.information').each(function(){
+			 	$item.push($(this).text());
+			 })
+       $.ajax({
+			      type: 'post',
+			      url: 'php_processes/edit-sla.php',
+			      data: {details: $item,old:$old},
+			      });
+            location.reload();
+
+					})
+// //edit-sla
+// var $old=[];
+//
+// $(".edit_sla").click(function(){
+//       var td = $(this).closest('td');
+// 			var value = $(this).closest('tr').find('.information').attr('contenteditable','true');
+// 			$(this).hide();
+// 			$(this).closest('tr').find(".save_sla").show();
+//       $(this).closest('tr').find('.information').each(function(){
+//         // $(this).closest('tr').find('.information').addClass("active-editsla");
+//       $old.push($(this).text());
+//      })
+//
+// 		})
+//
+// $(".save_sla").click(function(){
+//   var value = $(this).closest('tr').find('.information').attr('contenteditable','false');
+//
+// 			$(this).hide();
+// 			$(".edit_sla").show();
+// 			var $item=[];
+// 			 $(this).closest('tr').find('.information').each(function(){
+//          // $(this).closest('tr').find('.information').removeClass("active-editsla");
+// 			 	$item.push($(this).text());
+// 			 })
+//        $.ajax({
+// 			      type: 'post',
+// 			      url: 'php_processes/edit-sla.php',
+// 			      data: {details: $item,old:$old},
+// 			      });
+// 					})
+
+//add kb subcategory
+$("#subcategory").submit(function(e) {
+
+   e.preventDefault();swal({
+     title: "Create new category?",
+     text: "Make sure it is not yet existing!",
+     icon: "warning",
+     buttons: ["Close", "Confirm"],
+     dangerMode: true,
+   }).then((willDelete) => {
+     if(willDelete){
+       $.ajax({
+         url: 'php_processes/new-subcategory.php',
+         type: 'POST',
+         data: $(this).serialize(),
+         success: function()
+          {
+            swal("Subcategory added!", " ", "success").then(function(){
+              window.location="knowledgebase.php";
+            });
+          }
+        })
+      } else {
+        swal("", "Subcategory not yet submitted!","error");
+      }
+    });
+  });
+
+
+//edit Profile
+  var $old=[];
+  $("#selectutype").prop("disabled", true);
+
+  $(".edit_profile").click(function(){
+    $("#selectutype").prop("disabled", false);
+    $('select').material_select();
+
+    var value = $(".editable").attr('contenteditable','true');
+    $(this).hide();
+    $(".save_profile").show();
+    $("#profile tr:nth-child(-n+4) td:nth-child(2)").each(function(){
+      $old.push($(this).text());
+    })
+    var value = $("#selectutype option:selected").text();
+    $old.push(value);
+})
+
+$(".save_profile").click(function(){
+  var $item=[];
+  $("#selectutype").prop("disabled", true);
+  $('select').material_select();
+
+  $("#profile tr:nth-child(-n+4) td:nth-child(2)").each(function(){
+    $item.push($(this).text());
+  })
+  var value = $("#selectutype option:selected").text();
+  $item.push(value);
+   $.ajax({
+        type: 'post',
+        url: 'php_processes/edit-profile.php',
+        data: {details: $item,old:$old},
+  });
+  var value = $(".editable").attr('contenteditable',false);
+  $(this).hide();
+  $(".edit_profile").show();
+})

@@ -4,6 +4,7 @@ session_start();
 $db = mysqli_connect("localhost", "root", "", "eei_db");
 
 
+
 $request_title = mysqli_real_escape_string($db, $_POST['title']);
 $request_details = mysqli_real_escape_string($db, $_POST['request_details']);
 
@@ -74,7 +75,7 @@ $file = '../uploads/' .$_FILES['file']['name'];
 $upload = move_uploaded_file($tmp_name, $file);
 $uploader = $_SESSION['user_id'];
 if($upload){
-  $query9 = "INSERT INTO attachment_t VALUES('','$name','$uploader','$latest_id','hi')";
+  $query9 = "INSERT INTO attachment_t VALUES(DEFAULT,'$name','$uploader','$latest_id')";
   if (!mysqli_query($db, $query9))
   {
     die('Error' . mysqli_error($db));

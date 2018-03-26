@@ -56,6 +56,7 @@
             <?php
             $db = mysqli_connect("localhost", "root", "", "eei_db");
 
+
             $query = "SELECT * FROM faq_article_t fat LEFT JOIN faq_subcategory_t fst ON fat.subcategory_id = fst.subcategory_id  WHERE article_id = '".$_GET['id']."'";
             $result= mysqli_query($db,$query);
             $row = mysqli_fetch_assoc($result);

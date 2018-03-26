@@ -41,7 +41,9 @@
               }
               else if ($_SESSION['user_type'] == "Network Engineer"){
                 $id = $_SESSION['user_id'];
-                $query = "SELECT COUNT(*) as count FROM ticket_t LEFT JOIN service_ticket_t USING (ticket_id) LEFT JOIN user_access_ticket_t uat USING (ticket_id) LEFT JOIN sla_t sev ON sev.id = ticket_t.severity_level LEFT JOIN ticket_status_t stat ON stat.status_id = ticket_t.ticket_status WHERE (t.ticket_status = 6 AND ticket_t.ticket_agent_id = '$id') OR (uat.checker='$id' AND uat.isChecked IS NULL) OR (uat.approver = '$id' AND uat.isApproved IS NULL AND uat.checker IS NULL) OR (stat.ticket_status = 'Checked' AND uat.isApproved IS NULL AND uat.approver='$id')";
+                $query = "SELECT COUNT(*) as count FROM ticket_t LEFT JOIN service_ticket_t USING (ticket_id) LEFT JOIN user_access_ticket_t uat USING (ticket_id) LEFT JOIN sla_t sev ON sev.id = ticket_t.severity_level LEFT JOIN ticket_status_t stat ON stat.status_id = ticket_t.ticket_status WHERE (ticket_t.ticket_status = 6 AND ticket_t.ticket_agent_id = '$id') OR (uat.checker='$id' AND uat.isChecked IS NULL) OR (uat.approver = '$id' AND uat.isApproved IS NULL AND uat.checker IS NULL) OR (stat.ticket_status = 'Checked' AND uat.isApproved IS NULL AND uat.approver='$id')";
+                // $query = "SELECT COUNT(*) as count FROM ticket_t t LEFT JOIN service_ticket_t st USING (ticket_id) LEFT JOIN user_access_ticket_t uat USING (ticket_id) LEFT JOIN sla_t sev ON sev.id = t.severity_level LEFT JOIN ticket_status_t stat ON stat.status_id = t.ticket_status WHERE (t.ticket_status = 5 AND t.it_group_manager_id = '$id') OR (uat.checker='$id' AND uat.isChecked IS NULL) OR (uat.approver = '$id' AND uat.isApproved IS NULL AND uat.checker IS NULL) OR (t.ticket_status = 2 AND uat.isApproved IS NULL AND uat.approver='$id')";
+
               }
 
               $result = mysqli_query($db,$query);

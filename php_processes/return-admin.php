@@ -4,6 +4,7 @@ session_start();
 
 $db = mysqli_connect("localhost", "root", "", "eei_db");
 
+
 $reason = mysqli_real_escape_string($db, $_POST['return_reason']);
 $id = mysqli_real_escape_string($db, $_POST['id']);
 $logger = $_SESSION['user_id'];
@@ -27,7 +28,7 @@ if (!mysqli_query($db, $query))
   die('Error' . mysqli_error($db));
 }
 
-$query2 = "INSERT INTO returns_t VALUES (DEFAULT, '$id', '$reason')";
+$query2 = "INSERT INTO ticket_returns_t VALUES (DEFAULT, '$id', '$reason')";
 if (!mysqli_query($db, $query2))
 {
   die('Error' . mysqli_error($db));

@@ -1,4 +1,5 @@
-<?php $db = mysqli_connect("localhost", "root", "", "eei_db");?>
+<?php $db = mysqli_connect("localhost", "root", "", "eei_db");
+?>
 
 <div class="col s12 m12 l2" id="sidenav">
     <ul id="slide-out" class="side-nav fixed">
@@ -88,7 +89,7 @@
 
       <!-- Tickets For Review and Other Links -->
       <?php if($_SESSION['user_type'] == 'Administrator'){ ?>
-        <ul class="collapsible collapsible-accordion">
+        <ul id="auto-down" class="collapsible collapsible-accordion">
           <li><a class="collapsible-header tooltipped" data-position="right" data-tooltip="Tickets of all requestors"  href="#!"><i class="tiny material-icons">view_list</i>Tickets for Review</a>
             <div class="collapsible-body">
               <ul>
@@ -97,9 +98,15 @@
                     $query = "SELECT COUNT(*) AS count FROM ticket_t LEFT JOIN service_ticket_t USING (ticket_id) LEFT JOIN user_access_ticket_t USING (ticket_id) WHERE (ticket_t.ticket_category is NULL AND ticket_t.severity_level is NULL AND ticket_t.ticket_type ='Service') OR (ticket_t.ticket_status = 5 AND ticket_t.it_group_manager_id IS NULL) OR (ticket_t.ticket_category is NULL AND ticket_t.severity_level is NULL AND ((user_access_ticket_t.isChecked = true AND user_access_ticket_t.isApproved=true) OR (user_access_ticket_t.checker IS NULL AND user_access_ticket_t.isApproved = true)))";
 
                     $result = mysqli_query($db,$query);
-                    while($row = mysqli_fetch_assoc($result)){ ?>
+                    while($row = mysqli_fetch_assoc($result)){
+                      if($row['count'] == '0')
+                    { ?>
                       <span class="badge ticket_count"> <?php echo $row['count'] ?></span>
-                    <?php } ?>
+                    <?php
+                    }
+                    else{ ?>
+                    <span class="new badge ticket_count"> <?php echo $row['count'] ?> new</span>
+                    <?php }} ?>
                   </a>
                 </li>
                 <li class="collapsible"><a href="review-pending-tickets.php">Pending
@@ -151,9 +158,15 @@
 
 
                       $result = mysqli_query($db,$query);
-                      while($row = mysqli_fetch_assoc($result)){ ?>
+                      while($row = mysqli_fetch_assoc($result)){
+                        if($row['count'] == '0')
+                      { ?>
                         <span class="badge ticket_count"> <?php echo $row['count'] ?></span>
-                    <?php } ?>
+                      <?php
+                      }
+                      else{ ?>
+                      <span class="new badge ticket_count"> <?php echo $row['count'] ?> new</span>
+                      <?php }} ?>
                   </a>
                 </li>
                 <li class="collapsible"><a href="checkedRequests.php">Checked
@@ -192,20 +205,26 @@
                       $id = $_SESSION['user_id'];
                       $query = "SELECT COUNT(*) as count FROM ticket_t t LEFT JOIN service_ticket_t st USING (ticket_id) LEFT JOIN user_access_ticket_t uat USING (ticket_id) LEFT JOIN sla_t sev ON sev.id = t.severity_level LEFT JOIN ticket_status_t stat ON stat.status_id = t.ticket_status WHERE (t.ticket_status = 5 AND t.it_group_manager_id = '$id') OR (uat.checker='$id' AND uat.isChecked IS NULL) OR (uat.approver = '$id' AND uat.isApproved IS NULL AND uat.checker IS NULL) OR (stat.ticket_status = 'Checked' AND uat.isApproved IS NULL AND uat.approver='$id')";
                       $result = mysqli_query($db,$query); ?>
-                        <?php while($row = mysqli_fetch_assoc($result)){ ?>
+                        <?php while($row = mysqli_fetch_assoc($result)){
+                          if($row['count'] == '0')
+                        { ?>
                           <span class="badge ticket_count"> <?php echo $row['count'] ?></span>
-                  <?php } ?>
+                        <?php
+                        }
+                        else{ ?>
+                        <span class="new badge ticket_count"> <?php echo $row['count'] ?> new</span>
+                        <?php }} ?>
                 </a></li>
                 <li class="collapsible"><a href="review-assigned-tickets.php">Assigned
                   <?php
                       $id = $_SESSION['user_id'];
                       $query = "SELECT COUNT(*) as count FROM ticket_t t LEFT JOIN service_ticket_t st USING (ticket_id) LEFT JOIN user_access_ticket_t uat USING (ticket_id) LEFT JOIN sla_t sev ON sev.id = t.severity_level LEFT JOIN ticket_status_t stat ON stat.status_id = t.ticket_status WHERE t.ticket_status = 6 AND (t.it_group_manager_id = '$id' OR uat.checker='$id' OR uat.approver = '$id')";
 
-                      $result = mysqli_query($db,$query); ?>
-                        <?php while($row = mysqli_fetch_assoc($result)){ ?>
-                          <span class="badge ticket_count"> <?php echo $row['count'] ?></span>
-                  <?php } ?>
-                </a></li>
+                      $result = mysqli_query($db,$query);
+                      while($row = mysqli_fetch_assoc($result)){?>
+                        <span class="badge ticket_count"> <?php echo $row['count'] ?></span>
+                      <?php } ?>
+                  </a></li>
                 <li class="collapsible"><a href="review-resolved-tickets.php">Resolved
                   <?php
                       $query = "SELECT COUNT(*) as count FROM ticket_t t LEFT JOIN service_ticket_t st USING (ticket_id) LEFT JOIN user_access_ticket_t uat USING (ticket_id) LEFT JOIN sla_t sev ON sev.id = t.severity_level LEFT JOIN ticket_status_t stat ON stat.status_id = t.ticket_status WHERE t.ticket_status = 7 AND (t.it_group_manager_id = '$id' OR uat.checker='$id' OR uat.approver = '$id')";
@@ -256,10 +275,16 @@
                   $id = $_SESSION['user_id'];
                   $query = "SELECT COUNT(*) as count FROM ticket_t t LEFT JOIN service_ticket_t st USING (ticket_id) LEFT JOIN user_access_ticket_t uat USING (ticket_id) LEFT JOIN sla_t sev ON sev.id = t.severity_level LEFT JOIN ticket_status_t stat ON stat.status_id = t.ticket_status WHERE t.ticket_status = 6 AND (t.it_group_manager_id = '$id' OR uat.checker='$id' OR uat.approver = '$id')";
 
-                      $result = mysqli_query($db,$query); ?>
-                        <?php while($row = mysqli_fetch_assoc($result)){ ?>
-                          <span class="badge ticket_count"> <?php echo $row['count'] ?></span>
-                  <?php } ?>
+                  $result = mysqli_query($db,$query);
+                  while($row = mysqli_fetch_assoc($result)){
+                    if($row['count'] == '0')
+                  { ?>
+                    <span class="badge ticket_count"> <?php echo $row['count'] ?></span>
+                  <?php
+                  }
+                  else{ ?>
+                  <span class="new badge ticket_count"> <?php echo $row['count'] ?> new</span>
+                  <?php }} ?>
                 </a></li>
                 <li class="collapsible"><a href="review-resolved-tickets.php">Resolved
                   <?php
@@ -306,16 +331,23 @@
                 <li class="collapsible"><a href="review-incoming-tickets.php">Incoming
                   <?php
                       $id = $_SESSION['user_id'];
-                      $query = "SELECT COUNT(*) as count FROM ticket_t t LEFT JOIN service_ticket_t st USING (ticket_id) LEFT JOIN user_access_ticket_t uat USING (ticket_id) LEFT JOIN sla_t sev ON sev.id = t.severity_level LEFT JOIN ticket_status_t stat ON stat.status_id = t.ticket_status WHERE (t.ticket_status = 5 AND t.it_group_manager_id = '$id') OR (uat.checker='$id' AND uat.isChecked IS NULL) OR (uat.approver = '$id' AND uat.isApproved IS NULL AND uat.checker IS NULL) OR (stat.ticket_status = 'Checked' AND uat.isApproved IS NULL AND uat.approver=$id))";
-                      $result = mysqli_query($db,$query); ?>
-                        <?php while($row = mysqli_fetch_assoc($result)){ ?>
-                          <span class="badge ticket_count"> <?php echo $row['count'] ?></span>
-                  <?php } ?>
+                      $query = "SELECT COUNT(*) as count FROM ticket_t t LEFT JOIN service_ticket_t st USING (ticket_id) LEFT JOIN user_access_ticket_t uat USING (ticket_id) LEFT JOIN sla_t sev ON sev.id = t.severity_level LEFT JOIN ticket_status_t stat ON stat.status_id = t.ticket_status WHERE (t.ticket_status = 5 AND t.it_group_manager_id = '$id') OR (uat.checker='$id' AND uat.isChecked IS NULL) OR (uat.approver = '$id' AND uat.isApproved IS NULL AND uat.checker IS NULL) OR (t.ticket_status = 2 AND uat.isApproved IS NULL AND uat.approver='$id')";
+
+                      $result = mysqli_query($db,$query);
+                      while($row = mysqli_fetch_assoc($result)){
+                        if($row['count'] == '0')
+                      { ?>
+                        <span class="badge ticket_count"> <?php echo $row['count'] ?></span>
+                      <?php
+                      }
+                      else{ ?>
+                      <span class="new badge ticket_count"> <?php echo $row['count'] ?> new</span>
+                      <?php }} ?>
                 </a></li>
                 <li class="collapsible"><a href="review-assigned-tickets.php">Assigned
                   <?php
                   $id = $_SESSION['user_id'];
-                  $query = "SELECT COUNT(*) as count FROM ticket_t t LEFT JOIN service_ticket_t st USING (ticket_id) LEFT JOIN user_access_ticket_t uat USING (ticket_id) LEFT JOIN sla_t sev ON sev.id = t.severity_level LEFT JOIN ticket_status_t stat ON stat.status_id = t.ticket_status WHERE t.ticket_status = 6 AND (t.it_group_manager_id = '$id' OR uat.checker='$id' OR uat.approver = '$id')";
+                  $query = "SELECT COUNT(*) as count FROM ticket_t t LEFT JOIN service_ticket_t st USING (ticket_id) LEFT JOIN user_access_ticket_t uat USING (ticket_id) LEFT JOIN sla_t sev ON sev.id = t. severity_level LEFT JOIN ticket_status_t stat ON stat.status_id = t.ticket_status WHERE t.ticket_status = 6 AND (t.it_group_manager_id = '$id' OR uat.checker='$id' OR uat.approver = '$id')";
 
                       $result = mysqli_query($db,$query); ?>
                         <?php while($row = mysqli_fetch_assoc($result)){ ?>
@@ -368,9 +400,16 @@
                       $query = "SELECT COUNT(*) as count FROM ticket_t LEFT JOIN service_ticket_t USING (ticket_id) LEFT JOIN user_access_ticket_t uat USING (ticket_id) LEFT JOIN sla_t sev ON sev.id = ticket_t.severity_level LEFT JOIN ticket_status_t stat ON stat.status_id = ticket_t.ticket_status WHERE (ticket_t.ticket_status = 6 AND ticket_t.ticket_agent_id = '$id') OR (uat.checker='$id' AND uat.isChecked IS NULL) OR (uat.approver = '$id' AND uat.isApproved IS NULL AND uat.checker IS NULL) OR (stat.ticket_status = 'Checked' AND uat.isApproved IS NULL AND uat.approver='$id')";
 
                       $result = mysqli_query($db,$query); ?>
-                        <?php while($row = mysqli_fetch_assoc($result)){ ?>
-                          <span class="badge ticket_count"> <?php echo $row['count'] ?></span>
-                  <?php } ?>
+                        <?php while($row = mysqli_fetch_assoc($result)){
+                          if($row['count'] == '0')
+                          { ?>
+                            <span class="badge ticket_count"> <?php echo $row['count'] ?></span>
+                          <?php
+                          }
+                          else{ ?>
+                          <span class="new badge ticket_count"> <?php echo $row['count'] ?> new</span>
+                          <?php }
+                   } ?>
                 </a></li>
                 <li class="collapsible"><a href="review-resolved-tickets.php">Resolved
                   <?php
@@ -405,9 +444,9 @@
           </li>
         </ul>
       <?php }; ?>
-      <li><a class="waves-effect help-support" href="support.php"><i class="tiny material-icons">help_outline</i>Help and Support</a></li>
 
     </ul>
+    <!-- <a class="waves-effect help-support" href="support.php"><i class="tiny material-icons">help_outline</i>Help and Support</a> -->
 
 
     <!-- Hamburger menu icon when screen resized -->

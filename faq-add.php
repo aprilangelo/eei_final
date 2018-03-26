@@ -20,7 +20,11 @@
         <div class="col s12 m12 l12 table-header">
           <span id="faq-title"><i class="material-icons">library_add</i><span class="table-title">Create Knowledge Base Article</span></span>
           <div class="col s12" id="breadcrumb">
+            <?php if($_SESSION['user_type'] != 'Administrator'){ ?>
             <a href="home.php" class="breadcrumb">Knowledge Base</a>
+          <?php } else { ?>
+            <a href="knowledgebase.php" class="breadcrumb">Knowledge Base</a>
+          <?php }?>
             <a href="#!" class="breadcrumb">Create Knowledge Base Article</a>
           </div>
         </div>

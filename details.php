@@ -31,6 +31,7 @@
               <?php
               $db = mysqli_connect("localhost", "root", "", "eei_db");
 
+
                 $query2 = "SELECT * FROM ticket_t t INNER JOIN user_t r  on (t.user_id=r.user_id) left join user_access_ticket_t u on (u.ticket_id=t.ticket_id) WHERE t.ticket_id = '".$_GET['id']."'";
                   $result2= mysqli_query($db,$query2);
                     while($row = mysqli_fetch_assoc($result2)){
@@ -48,15 +49,35 @@
 
                   <!-- Confirm Resolution for Requestor  -->
                   <?php if ($row['user_id']== $_SESSION['user_id']){
-                     if ($row['ticket_status']==7 and $row['user_id'] == $_SESSION['user_id']) { ?>
+                    if ($row['ticket_status']==7 and $row['user_id'] == $_SESSION['user_id']) { ?>
                        <form id="confirm" name="confirm" method="post">
+                        <a href="#modal-reject" class="modal-trigger"><input id="reject" type="submit"  value="Reject"></input></a>
                          <input id="confirm" type="submit"  value="Confirm">
-                         <input  id="confirm" name = "ticketID" type="hidden" value="<?php echo $ticketID?>">
+                         <input  id="confirm" name ="ticketID" type="hidden" value="<?php echo $ticketID?>">
                        </form>
+                       <form>
+
+                       <div id="modal-reject" class="modal">
+                       <form method='post' name="reject-resolution" id="reject-resolution">
+                         <div class="modal-content">
+                           <h5>Reject Ticket</h5>
+                             <div class="input-field " id="request-form-row6">
+                               <input placeholder=" " type="text" name="reason">
+                                 <label for="title">Reason:</label>
+                             </div>
+                             <input  id="confirm" name = "ticketID" type="hidden" value="<?php echo $ticketID?>">
+
+                             </div>
+                           <div class="modal-footer">
+                             <a  class="btn modal-action modal-close">Close</a>
+                             <button class="btn" id="return" type="submit" name="submit">Reject</button>
+                           </div>
+                       </form>
+                       </div>
                    <?php }} ?>
 
                   <!-- Cancel Button for Admin -->
-                   <?php if ($_SESSION['user_type']=="Administrator" AND $row['ticket_status'] != 8) {?>
+                   <?php if ($_SESSION['user_type']=="Administrator" AND $row['ticket_status'] == 5) {?>
                      <form id="cancel" name="cancel" method="post">
                        <input id="cancel" type="submit" value="Cancel">
                        <input  id="cancel" name = "ticketID" type="hidden" value="<?php echo $ticketID?>">
@@ -183,6 +204,7 @@
                     <span class="black-text">
                       <?php
                         $db = mysqli_connect("localhost", "root", "", "eei_db");
+
                         $query = "SELECT t.ticket_type, t.ticket_title, s.request_details, t.auto_close_date,r.email_address as email, DATE_FORMAT(date_prepared, '%W %b %e %Y %r') as date_prepared, CONCAT(r.first_name, ' ', r.last_name) As requestor FROM ticket_t t INNER JOIN user_t r  on (t.user_id=r.user_id) left join service_ticket_t s on (s.ticket_id=t.ticket_id) WHERE s.ticket_id = '".$_GET['id']."'";
 
                         $query2 = "SELECT *, r.email_address as email, DATE_FORMAT(date_prepared, '%W %M %e %Y') as date_prepared, CONCAT(r.first_name, ' ', r.last_name) As requestor , r.user_type as user_type FROM ticket_t t INNER JOIN user_t r  on (t.user_id=r.user_id) left join user_access_ticket_t u on (u.ticket_id=t.ticket_id) WHERE u.ticket_id = '".$_GET['id']."'";
@@ -247,6 +269,7 @@
                       <div id="comment_logs" class="alog">
                         <?php
                         $db = mysqli_connect("localhost", "root", "", "eei_db");
+
                         $result = mysqli_query($db, "SELECT a.activity_log_details, DATE_FORMAT(a.timestamp, '%b %e %Y %r') as timestamp, a.logger, a.activity_log_id, CONCAT(r.first_name, ' ', r.last_name) AS user, t.ticket_id FROM activity_log_t a LEFT JOIN ticket_t t ON a.ticket_id = t.ticket_id LEFT JOIN user_t r ON r.user_id = a.logger WHERE t.ticket_id = '".$_GET['id']."' ORDER BY a.activity_log_id DESC");
                         $row_cnt = mysqli_num_rows($result);
                         if($row_cnt > 0){
@@ -270,6 +293,7 @@
                                 <label for="activity_log">Log activity here</label>
                                 <?php
                                   $db = mysqli_connect("localhost", "root", "", "eei_db");
+
 
                                   $query2 = "SELECT COUNT(*) as count, ticket_id FROM ticket_t WHERE ticket_id = '".$_GET['id']."'";
 
@@ -297,6 +321,7 @@
                 <div class="col s12 m12 l5">
                   <?php if($_SESSION['user_type'] != 'Requestor'){
                     $db = mysqli_connect("localhost", "root", "", "eei_db");
+
                     $tagent = mysqli_query($db, "SELECT * FROM ticket_t WHERE ticket_id = $ticketID");
 
                     if ($result = mysqli_fetch_array($tagent)){
@@ -311,6 +336,7 @@
                         <input value = "<?php echo $_GET['id']?>" class="title" name="id" type="hidden" data-length="40" class="validate" required>
                         <?php
                         $db = mysqli_connect("localhost", "root", "", "eei_db");
+
                         $query6 = "SELECT ticket_number FROM ticket_t WHERE ticket_id = '".$_GET['id']."'";
                         $result= mysqli_query($db,$query6);
                         while($row = mysqli_fetch_assoc($result)){
@@ -352,6 +378,7 @@
                     <?php
                     $db = mysqli_connect("localhost", "root", "", "eei_db");
 
+
                     $query6 = "SELECT ticket_number FROM ticket_t WHERE ticket_id = '".$_GET['id']."'";
 
                     $result= mysqli_query($db,$query6);
@@ -374,6 +401,7 @@
                       <div class="input-field ticket-properties" id="request-form">
                         <?php
                           $db = mysqli_connect("localhost", "root", "", "eei_db");
+
                           ?>
 
                           <select name = "assignee" required >
@@ -409,6 +437,7 @@
 
                   <?php
                   $db = mysqli_connect("localhost", "root", "", "eei_db");
+
 
                   $query6 = "SELECT ticket_number FROM ticket_t WHERE ticket_id = '".$_GET['id']."'";
 
@@ -457,6 +486,7 @@
               <?php
               $db = mysqli_connect("localhost", "root", "", "eei_db");
 
+
               $query6 = "SELECT ticket_number FROM ticket_t WHERE ticket_id = '".$_GET['id']."'";
 
               $result= mysqli_query($db,$query6);
@@ -473,6 +503,7 @@
                 <div class="input-field ticket-properties" id="request-form">
                   <?php
                     $db = mysqli_connect("localhost", "root", "", "eei_db");
+
                     ?>
 
                     <select name = "assignee" required >
@@ -498,6 +529,7 @@
         <?php }}}?>
                   <?php if($_SESSION['user_type'] == 'Administrator'){
                     $db = mysqli_connect("localhost", "root", "", "eei_db");
+
                     $sevcat = mysqli_query($db, "SELECT severity_level, ticket_category FROM ticket_t WHERE ticket_id = '".$_GET['id']."'");
 
                     if ($result = mysqli_fetch_array($sevcat)){
@@ -517,7 +549,8 @@
                                    <div class="col s12 m6 l6" id="assign">
                                      <div class="input-field ticket-properties" id="request-form">
                                        <?php
-                                         $db = mysqli_connect("localhost", "root", "", "eei_db");?>
+                                         $db = mysqli_connect("localhost", "root", "", "eei_db");
+?>
 
                                          <select name = "category" required>
                                          <option disabled selected>Select</option>
@@ -534,7 +567,8 @@
                                    <div class="col s12 m6 l6" id="assign">
                                      <div class="input-field ticket-properties" id="request-form">
                                        <?php
-                                         $db = mysqli_connect("localhost", "root", "", "eei_db");?>
+                                         $db = mysqli_connect("localhost", "root", "", "eei_db");
+?>
                                          <select name='severity'>
                                            <option disabled selected>Select</option>
                                          <?php
@@ -561,11 +595,12 @@
 
                       <?php if($_SESSION['user_type'] != 'Requestor'){
                       $db = mysqli_connect("localhost", "root", "", "eei_db");
-                      $sevcat = mysqli_query($db, "SELECT severity_level, ticket_category FROM ticket_t WHERE ticket_id = '".$_GET['id']."'");
+
+                      $sevcat = mysqli_query($db, "SELECT ticket_status, severity_level, ticket_category FROM ticket_t WHERE ticket_id = '".$_GET['id']."'");
 
                       if ($result = mysqli_fetch_array($sevcat)){
-                        if($result['severity_level'] != NULL){ ?>
-                      <!-- Modal Trigger -->
+                        if($result['severity_level'] != NULL AND $result['ticket_status'] != 8){?>
+                                                <!-- Modal Trigger -->
                       <a class="waves-effect waves-light modal-trigger" href="#modal1"><i id="edit" class="small material-icons">edit</i></a>
                     <?php }}} ?>
                       <!-- Modal Structure -->
@@ -574,9 +609,10 @@
                           <h6>Edit Ticket Properties</h6>
                           <form id="edit-properties" name="edit-properties" method="post">
                             <div class="col s12 m12 l12 properties-box" id="properties-box">
-                              <div class="input-field ticket-properties" id="request-form-row2">
+                              <div class="input-field ticket-properties" id="request-form-row6">
                                 <?php
-                                  $db = mysqli_connect("localhost", "root", "", "eei_db");?>
+                                  $db = mysqli_connect("localhost", "root", "", "eei_db");
+?>
 
                                   <?php $retrieve = mysqli_query($db, "SELECT * FROM ticket_t LEFT JOIN ticket_status_t stat ON stat.status_id = ticket_t.ticket_status LEFT JOIN sla_t sev ON sev.id = ticket_t.severity_level WHERE ticket_id = '".$_GET['id']."'");
                                   $row = mysqli_fetch_array($retrieve);?>
@@ -584,7 +620,15 @@
                                   <select name = "status" required>
                                   <option value ="<?php echo $row['status_id']?>" selected ><?php echo $row['ticket_status']?></option>
                                   <?php
-                                    $get_stat = "SELECT * FROM ticket_status_t WHERE status_id >= '5'";
+                                  if($_SESSION['user_type'] == 'Access Group Manager' || $_SESSION['user_type'] == 'Network Group Manager'){
+                                    $get_stat = "SELECT * FROM ticket_status_t WHERE status_id >= 7 ";
+                                  } elseif($_SESSION['user_type'] == 'Technicals Group Manager'){
+                                    $get_stat = "SELECT * FROM ticket_status_t WHERE status_id = 7 ";
+                                  } elseif ($_SESSION['user_type'] == 'Administrator'){
+                                    $get_stat = "SELECT * FROM ticket_status_t WHERE status_id = 7 OR status_id = 9 ";
+                                  } elseif($_SESSION['user_type'] == 'Technician' || $_SESSION['user_type'] == 'Network Engineer'){
+                                    $get_stat = "SELECT * FROM ticket_status_t WHERE status_id = 7";
+                                  }
                                     $result = mysqli_query($db, $get_stat);
                                     while ($row2 = mysqli_fetch_assoc($result)) {
                                       if ($row['status_id']!=$row2['status_id']) {?>
@@ -597,13 +641,14 @@
                                   <label for="title">Ticket Status</label>
                               </div>
                               <!-- FOR REQUIRED ACTIVITY LOG -->
-                              <div class="input-field ticket-properties al" id="request-form-row2" style="display:none;">
+                              <div class="input-field ticket-properties al" id="request-form-row6" style="display:none;">
                                 <input type="text" id="al" name="al" placeholder="Required Field">
                                 <label for="al" class="red-text">Activity Log</label>
                               </div>
-                              <div class="input-field ticket-properties" id="request-form-row2">
+                              <div class="input-field ticket-properties" id="request-form-row6">
                                 <?php
-                                  $db = mysqli_connect("localhost", "root", "", "eei_db");?>
+                                  $db = mysqli_connect("localhost", "root", "", "eei_db");
+?>
 
                                   <?php $retrieve = mysqli_query($db, "SELECT ticket_status, ticket_category, severity_level FROM ticket_t WHERE ticket_id = '".$_GET['id']."'");
                                   $row = mysqli_fetch_array($retrieve);?>
@@ -622,15 +667,17 @@
                                   </select>
                                   <label for="title">Ticket Category</label>
                               </div>
-                              <div class="input-field ticket-properties" id="request-form-row2">
+                              <div class="input-field ticket-properties" id="request-form-row6">
                                   <?php
-                                    $db = mysqli_connect("localhost", "root", "", "eei_db");?>
+                                    $db = mysqli_connect("localhost", "root", "", "eei_db");
+?>
 
                                     <?php $retrieve = mysqli_query($db, "SELECT * FROM ticket_t LEFT JOIN ticket_status_t stat ON stat.status_id = ticket_t.ticket_status LEFT JOIN sla_t sev ON sev.id = ticket_t.severity_level WHERE ticket_id = '".$_GET['id']."'");
                                     $row = mysqli_fetch_array($retrieve);?>
 
                                     <?php
                                       $db = mysqli_connect("localhost", "root", "", "eei_db");
+
 
 
                                       ?>
@@ -662,7 +709,8 @@
                             <?php
                             $db = mysqli_connect("localhost", "root", "", "eei_db");
 
-                              $query = "SELECT *, DATE_FORMAT(t.resolution_date,'%d %M %Y %r') as date_resolution, DATE_FORMAT(t.date_required, '%d %M %Y %r') as date_required FROM ticket_t t LEFT JOIN sla_t sev ON t.severity_level = sev.id LEFT JOIN ticket_status_t stat ON stat.status_id = t.ticket_status WHERE ticket_id = '".$_GET['id']."'";
+
+                              $query = "SELECT *, DATE_FORMAT(t.resolution_date,'%d %M %Y %r') as date_resolution, sev.description, DATE_FORMAT(t.date_required, '%d %M %Y %r') as date_required FROM ticket_t t LEFT JOIN sla_t sev ON t.severity_level = sev.id LEFT JOIN ticket_status_t stat ON stat.status_id = t.ticket_status WHERE ticket_id = '".$_GET['id']."'";
                               $result = mysqli_query($db,$query);
 
                               while($row = mysqli_fetch_assoc($result)){
@@ -694,7 +742,7 @@
 
 
                                 echo "<tr><td class=\"first\">" . "Category" . "</td><td>"  . $row['ticket_category']  . "</td>" .
-                                     "<tr><td class=\"first\">" . "Status" .  "</td><td><span class=\"badge new\">" . $row['ticket_status'] . "</span></td>" .
+                                     "<tr><td class=\"first\">" . "Status" .  "</td><td><span class=\"badge new stat\">" . $row['ticket_status'] . "</span></td>" .
                                      "<tr><td class=\"first\">" . "Severity" . "</td><td class=\"$class\" id=\"sev\">"  . $row['severity_level']  . " - " . $row['description'] . "</td>" .
                                      "<tr><td class=\"first\">" . "Due on" . "</td><td class=\"deet\">" .  $row['date_required'] . "</td>" .
                                      "<tr><td class=\"first\">" . "Resolution Date" . "</td><td class=\"deet\">" .  $row['date_resolution'] . "</td>";
@@ -711,6 +759,7 @@
                             <tbody>
                                 <?php
                                 $db = mysqli_connect("localhost", "root", "", "eei_db");
+
 
                                 $query = "SELECT CONCAT(r.first_name, ' ', r.last_name) As requestor , r.email_address AS email FROM ticket_t t INNER JOIN user_t r  on (t.user_id=r.user_id) WHERE t.ticket_id = '".$_GET['id']."'";
                                 $result = mysqli_query($db,$query);
@@ -763,6 +812,7 @@
 
                            <?php
                            $db = mysqli_connect("localhost", "root", "", "eei_db");
+
                            $ticketID = $_GET['id'];
 
                            $query = "SELECT * FROM attachment_t WHERE ticket_id = $ticketID";

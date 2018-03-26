@@ -4,6 +4,7 @@
   session_start();
   $db = mysqli_connect("localhost", "root", "", "eei_db");
 
+
   $token = mysqli_real_escape_string($db, $_POST['token']);
   $newpass = mysqli_real_escape_string($db, $_POST['newpass']);
   $confirmnewpass = mysqli_real_escape_string($db, $_POST['confirmnewpass']);

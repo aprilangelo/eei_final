@@ -1,6 +1,7 @@
 <?php
 $db = mysqli_connect("localhost", "root", "", "eei_db");
 
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
@@ -39,12 +40,12 @@ while(($filesop = fgetcsv($handle, 0, ",")) !== false)
            $mail->isSMTP();                                      // Set mailer to use SMTP
            $mail->Host = "smtp.gmail.com";  // Specify main and backup SMTP servers
            $mail->SMTPAuth = true;                               // Enable SMTP authentication
-           $mail->Username = "dondumaliang@gmail.com";                 // SMTP username
-           $mail->Password = "tritondrive";                           // SMTP password
+           $mail->Username = "eeiserviceteam@gmail.com";                 // SMTP username
+           $mail->Password = "service@EEI1";                          // SMTP password
            $mail->Port = 587;
            $mail->SMTPSecure = "tls";
            //Recipients
-           $mail->setFrom("dondumaliang@gmail.com", "Donna Dumaliang");
+           $mail->setFrom("eeiserviceteam@gmail.com", "EEI Service Desk Team");
            $mail->addAddress($email,$name);     // Add a recipient
            $mail->addReplyTo("dondumaliang@gmail.com", "Donna Dumaliang");
            // $mail->AddCC($accessmanager);

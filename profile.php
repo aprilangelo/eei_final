@@ -91,6 +91,9 @@
       <div class="main-content">
         <div class="col s12 m12 l12 table-header">
           <span class="table-title">User Profile</span>
+          <input id="reactivate" class = "edit_profile" name="submit" type="submit" value="Edit Profile">
+          <input id="reactivate" class = "save_profile" name="submit" type="submit" value="Save Profile" hidden>
+
           <?php
           $db = mysqli_connect("localhost", "root", "", "eei_db");
           $id = $_GET["id"];
@@ -127,34 +130,65 @@
                 <tbody>
                   <tr>
                     <td>First Name</td>
-                    <td class = "pflBody" contenteditable="false"><?php echo $row['first_name']?></td>
+                    <td class = "pflBody editable"><?php echo $row['first_name']?></td>
                   </tr>
                   <tr>
                     <td>Last Name</td>
-                    <td class = "pflBody" contenteditable="false"><?php echo $row['last_name']?></td>
+                    <td class = "pflBody editable"><?php echo $row['last_name']?></td>
                   </tr>
                   <tr>
                     <td>Userid</td>
-                    <td class = "pflBody" contenteditable="false"><?php echo $row['userid']?></td>
+                    <td class = "pflBody editable"><?php echo $row['userid']?></td>
                   </tr>
                   <tr>
                     <td>E-mail Address</td>
-                    <td class = "pflBody" contenteditable="false"><?php echo $row['email_address']?></td>
+                    <td class = "pflBody editable"><?php echo $row['email_address']?></td>
+
                   </tr>
                   <tr>
                     <td>User Type</td>
-                    <td class = "pflBody" contenteditable="false" ><?php echo $row['user_type']?></td>
+                    <td class = "pflBody ">
+                    <select id= "selectutype" name = "type" >
+                      <option value ="<?php echo $row['status_id']?>" selected ><?php echo $row['user_type']?></option>
+                    <?php
+                    $db = mysqli_connect("localhost", "root", "", "eei_db");?>
+                    <?php
+                    $get_user_type = mysqli_query($db, "SELECT column_type FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'user_t' AND COLUMN_NAME = 'user_type'");
+                    $row = mysqli_fetch_array($get_user_type);
+                    $enumList = explode(",", str_replace("'", "", substr($row['column_type'], 5, (strlen($row['column_type'])-6))));
+                    foreach($enumList as $value){?>
+                    <option> <?php echo $value?> </option>
+                        <?php } ?>
+                    </select></td>
                   </tr>
+                  <?php
+                  $db = mysqli_connect("localhost", "root", "", "eei_db");
+                  $id = $_GET["id"];
+
+                  $query1 = "SELECT * from user_t where user_id = $id";
+
+                  if (!mysqli_query($db, $query1))
+                  {
+                    die('Error' . mysqli_error($db));
+                  }
+
+                  $result = mysqli_query($db, $query1);
+                  $row=mysqli_fetch_array($result,MYSQLI_ASSOC);
+
+                  mysqli_close($db);
+
+                   ?>
                   <tr>
                     <td>Deactivation Date</td>
-                    <td class = "pflBody" contenteditable="false" ><?php echo $row['deactivation_date']?></td>
+                    <td class = "pflBody" ><?php echo $row['deactivation_date']?></td>
                   </tr>
                   <tr>
                     <td>Reactivation Date</td>
-                    <td class = "pflBody" contenteditable="false" ><?php echo $row['reactivation_date']?></td>
+                    <td class = "pflBody" ><?php echo $row['reactivation_date']?></td>
                   </tr>
                 </tbody>
               </table>
+
             </div>
             <?php include 'templates/ticketforms.php'; ?>
           </div> <!-- End of main container of col 10 -->

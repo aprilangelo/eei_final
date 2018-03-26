@@ -52,10 +52,10 @@
                   <?php include 'templates/faq-sorter.php'?>
                   <?php while($row = mysqli_fetch_assoc($result)){?>
                     <div class="row list">
-                      <div class="col s3 m4 l2 center-align">
+                      <div class="col s3 m3 l2 center-align">
                         <span><i id="qa" class="tiny material-icons">question_answers</i></span>
                       </div>
-                      <div class="col s3 m4 l9">
+                      <div class="col s9 m9 l9">
                         <div class="row article-instance">
                           <a href="faq-article.php?id=<?php echo $row['article_id']?>" class="articleTitle" id="articleTitle"><?php echo $row['article_title'] ?></a>
                         </div>

@@ -3,6 +3,7 @@ session_start();
 
 $db = mysqli_connect("localhost", "root", "", "eei_db");
 
+
 $desc = mysqli_real_escape_string($db, $_POST['desc']);
 $lvl = mysqli_real_escape_string($db, $_POST['sevlvl']);
 // $time = mysqli_real_escape_string($db, $_POST['sevtime']);

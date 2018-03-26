@@ -3,6 +3,7 @@
 session_start();
 $db = mysqli_connect("localhost", "root", "", "eei_db");
 
+
 $email = mysqli_real_escape_string($db, $_POST['email']);
 
 use PHPMailer\PHPMailer\PHPMailer;
@@ -32,12 +33,12 @@ else {
       $mail->isSMTP();                                      // Set mailer to use SMTP
       $mail->Host = "smtp.gmail.com";  // Specify main and backup SMTP servers
       $mail->SMTPAuth = true;                               // Enable SMTP authentication
-      $mail->Username = "dondumaliang@gmail.com";                 // SMTP username
-      $mail->Password = "tritondrive";                           // SMTP password
+      $mail->Username = "eeiserviceteam@gmail.com";                 // SMTP username
+      $mail->Password = "service@EEI1";                         // SMTP password
       $mail->Port = 587;                                    // TCP port to connect to
       $mail->SMTPSecure = "tls";
       //Recipients
-      $mail->setFrom("dondumaliang@gmail.com", "Donna Dumaliang");
+      $mail->setFrom("eeiserviceteam@gmail.com", "EEI Service Desk Team");
       $mail->addAddress($email);     // Add a recipient
       $mail->addReplyTo("dondumaliang@gmail.com", "Donna Dumaliang");
 
@@ -57,7 +58,7 @@ else {
 
       "You received this e-mail because you forgot your password. Kindly click the button below to reset your password </b><br><br>" .
 
-      "<br><br><a style=\"background-color: #4b75ff; padding: 13px; color:white; border-radius: 3px; display: block; width: 26%; text-decoration: none; margin: 0 auto;\" href=\"http://localhost/donna/reset-password.php?token=$token\">Click here to go to website" .
+      "<br><br><a style=\"background-color: #4b75ff; padding: 13px; color:white; border-radius: 3px; display: block; width: 26%; text-decoration: none; margin: 0 auto;\" href=\"http://localhost/final-eei/reset-password.php?token=$token\">Click here to go to website" .
 
       "</a><br><br>--<br><b>IT Service Desk Team</b>" . "</div></div>" .
 

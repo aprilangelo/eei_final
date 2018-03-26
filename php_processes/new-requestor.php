@@ -4,6 +4,7 @@ session_start();
 $db = mysqli_connect("localhost", "root", "", "eei_db");
 
 
+
 //mailer start
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -18,6 +19,7 @@ require '../PHPMailer-master/src/SMTP.php';
 // require '/Applications/XAMPP/xamppfiles/htdocs/eei_merged/PHPMailer-master/src/PHPMailer.php';
 // require '/Applications/XAMPP/xamppfiles/htdocs/eei_merged/PHPMailer-master/src/SMTP.php';
 $db = mysqli_connect("localhost", "root", "", "eei_db");
+
 
 // $password = mysqli_real_escape_string($db, $_POST['password']);
 $userid = mysqli_real_escape_string($db, $_POST['userid']);
@@ -67,12 +69,12 @@ $mail = new PHPMailer(true);                              // Passing `true` enab
     $mail->isSMTP();                                      // Set mailer to use SMTP
     $mail->Host = "smtp.gmail.com";  // Specify main and backup SMTP servers
     $mail->SMTPAuth = true;                               // Enable SMTP authentication
-    $mail->Username = "dondumaliang@gmail.com";                 // SMTP username
-    $mail->Password = "tritondrive";                          // SMTP password
+    $mail->Username = "eeiserviceteam@gmail.com";                 // SMTP username
+    $mail->Password = "service@EEI1";                            // SMTP password
     $mail->Port = 587;
     $mail->SMTPSecure = "tls";
     //Recipients
-    $mail->setFrom("dondumaliang@gmail.com", "Donna Dumaliang");
+    $mail->setFrom("eeiserviceteam@gmail.com", "EEI Service Desk Team");
     $mail->addAddress($email,$name);     // Add a recipient
     $mail->setFrom("dondumaliang@gmail.com", "Donna Dumaliang");
     // $mail->AddCC($accessmanager);
@@ -94,7 +96,7 @@ $mail = new PHPMailer(true);                              // Passing `true` enab
     "Password: <b>" . $randpass . "</b><br><br>" .
     "You will be prompted to change your password on your first login. For inquiries, kindly reply to this email." .
 
-    "<br><br><a style=\"background-color: #4b75ff; padding: 13px; color:white; border-radius: 3px; display: block; width: 26%; text-decoration: none; margin: 0 auto;\" href=\"http://localhost/eei/index.php\">Click here to go to website" .
+    "<br><br><a style=\"background-color: #4b75ff; padding: 13px; color:white; border-radius: 3px; display: block; width: 26%; text-decoration: none; margin: 0 auto;\" href=\"http://localhost/final-eei/index.php\">Click here to go to website" .
 
     "</a><br><br>--<br><b>IT Service Desk Team</b>" . "</div></div>" .
 

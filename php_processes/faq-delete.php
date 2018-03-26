@@ -2,6 +2,7 @@
 session_start();
 $db = mysqli_connect("localhost", "root", "", "eei_db");
 
+
 if (isset($_POST['id']))
 {
   $id = $_POST['id'];

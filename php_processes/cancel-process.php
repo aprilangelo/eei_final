@@ -1,6 +1,7 @@
 <?php
 session_start();
 $db = mysqli_connect("localhost", "root", "", "eei_db");
+
 $ticketID = mysqli_real_escape_string($db, $_POST['ticketID']);
 
 //id of cancelled is 9

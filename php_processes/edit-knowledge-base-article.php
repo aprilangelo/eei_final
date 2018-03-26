@@ -3,6 +3,7 @@
 session_start();
 $db = mysqli_connect("localhost", "root", "", "eei_db");
 
+
 $article = mysqli_real_escape_string($db, $_POST['article']);
 $articleid = mysqli_real_escape_string($db, $_POST['article_id']);
 

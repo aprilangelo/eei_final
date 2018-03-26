@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="shortcut icon" type="image/x-icon" href="img/eei-black.png" />
+    <link rel="shortcut icon" type="image/x-icon" href="https://www.eei.com.ph/img/favicon.ico" />
     <title>EEI Service Desk</title>
     <?php include 'templates/css_resources.php' ?>
   </head>
@@ -20,7 +20,7 @@
               <div class="row">
                 <div class="input-field col s12" id="login">
                   <input id="userid" name="userid" type="text" class="validate">
-                  <label for="userid" id="login">Userid</label>
+                  <label for="userid" id="login">User ID</label>
                 </div>
               </div>
               <div class="row">

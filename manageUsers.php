@@ -161,7 +161,8 @@
                         <div class="col s12">
                           <div class="input-field" id="request-form">
                             <?php
-                              $db = mysqli_connect("localhost", "root", "", "eei_db");?>
+                              $db = mysqli_connect("localhost", "root", "", "eei_db");
+?>
 
                               <select name = "type" required>
                               <option value= "">Select</option>
